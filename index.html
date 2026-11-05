@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mavuno – Farm to plate, Kenya</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fff;--ink:#1d2a1f;--mut:#667366;--g:#2e7d32;--g2:#e3f1e4;--line:#e0dccf;--land:#dfeccf;--land2:#cfe3bb;--water:#bcdcea;--road:#fff;--warn:#b26a00;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;--land:#26382a;--land2:#2c4230;--water:#1f3b48;--road:#3a4a3d;--warn:#e0a040;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;--land:#26382a;--land2:#2c4230;--water:#1f3b48;--road:#3a4a3d;--warn:#e0a040;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg)}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.5px;color:var(--g)}
+.logo span{color:var(--ink);font-weight:500;font-size:12px;display:block;letter-spacing:0;color:var(--mut)}
+.loc{font-size:12px;background:var(--g2);color:var(--g);padding:6px 10px;border-radius:99px;font-weight:600}
+.demo{margin:0 16px 8px;padding:8px 12px;border:1px dashed var(--warn);color:var(--warn);border-radius:10px;font-size:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--g);border-color:var(--g);color:#fff;font-weight:600}
+.map{margin:0 16px;border-radius:18px;overflow:hidden;border:1px solid var(--line);position:relative}
+.map svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}
+.pin .dot{fill:var(--g);stroke:#fff;stroke-width:2.5}
+.pin.sel .dot{fill:#c62828}
+.pin .zone{fill:var(--g);opacity:.16}
+.note{position:absolute;left:8px;bottom:6px;font-size:10px;color:var(--mut);background:var(--card);padding:2px 6px;border-radius:6px;opacity:.9}
+.panel{padding:14px 16px 40px}
+h2{font-size:17px;margin:18px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.name{font-weight:700;font-size:17px}
+.sub{color:var(--mut);font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;margin-right:4px}
+.ver{background:var(--g2);color:var(--g)}
+.unv{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.prac{font-size:13px;margin:8px 0;padding:8px 10px;border-radius:10px;background:var(--g2)}
+.prac b{color:var(--g)}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.price{font-weight:700}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
+.btn{width:100%;margin-top:10px;padding:13px;border:0;border-radius:12px;background:var(--g);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:default}
+.ok{background:var(--g2);border:1px solid var(--g);border-radius:16px;padding:14px}
+.ok li{margin:4px 0}
+.steps{display:grid;gap:8px}
+.step{display:flex;gap:10px;align-items:flex-start}
+.step i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--g);color:#fff;font-style:normal;font-weight:700;display:grid;place-items:center;font-size:13px}
+.road{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.road div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:13px}
+.road b{display:block;color:var(--g);font-size:12px;margin-bottom:2px}
+.link{background:none;border:0;color:var(--g);cursor:pointer;font-size:13px;padding:0;text-decoration:underline}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:8px 16px 24px}
+.tabs{display:flex;gap:6px;padding:4px 16px 10px}.tab{flex:1;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
+#acct .tabs{padding:0 0 10px}
+.btn2{width:100%;margin-top:10px;padding:11px;border:1px solid var(--g);border-radius:12px;background:transparent;color:var(--g);font-size:15px;font-weight:700;cursor:pointer}
+.fld{display:block;margin-top:10px;font-size:13px;color:var(--mut)}.fld input,.fld select,.addp input,.addp select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:15px}
+.addp{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.addp input,.addp select{margin:0}
+.row2{display:flex;gap:8px;flex-wrap:wrap}.row2 button{flex:1;margin-top:10px}.chk{font-size:13px;color:var(--mut);margin-top:8px}
+[hidden]{display:none!important}
+.ph{width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:8px}.th{width:52px;height:52px;object-fit:cover;border-radius:10px;margin-right:10px;flex:none}
+.fld input[type=file]{padding:8px}
+:root[data-theme="light"]{--bg:#fff;--card:#f2faf1;--ink:#26382a;--mut:#6f8173;--g:#43a047;--g2:#dff3df;--line:#e6efe4;--land:#e8f6df;--land2:#d8efc9;--water:#cde9f6;--road:#fff;--warn:#b26a00;--cl:10px 10px 22px rgba(80,120,80,.16),-6px -6px 16px rgba(255,255,255,.95),inset 3px 3px 8px rgba(255,255,255,.95),inset -5px -5px 12px rgba(80,130,80,.10);--cp:6px 6px 14px rgba(80,120,80,.16),-4px -4px 10px #fff,inset 2px 2px 5px #fff,inset -3px -3px 7px rgba(80,130,80,.12);--cg:8px 8px 18px rgba(58,154,67,.35),inset 3px 3px 8px rgba(255,255,255,.45),inset -5px -5px 10px rgba(0,80,0,.25);--ci:inset 4px 4px 9px rgba(80,120,80,.16),inset -3px -3px 8px rgba(255,255,255,.95);--gr:linear-gradient(145deg,#5cc062,#3a9a43)}
+body{font-family:"Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff}
+.app{background:#fff}
+.card,.ok,.road div{border:0;border-radius:26px;box-shadow:var(--cl);margin-bottom:16px}
+.card{background:var(--card)}
+.map{border:0;border-radius:30px;box-shadow:var(--cl);background:#fff}
+.chips{padding:8px 16px 20px}
+.tabs{padding:6px 16px 18px}
+#acct .tabs{padding:4px 0 18px}
+.chip,.tab,.loc{border:0;border-radius:22px;background:var(--card);box-shadow:var(--cp);font-family:inherit;font-weight:700}
+.chip{padding:10px 16px}
+.chip.on,.tab.on{background:var(--gr);color:#fff;box-shadow:var(--cg)}
+.btn{border-radius:22px;background:var(--gr);box-shadow:var(--cg);font-family:inherit;padding:14px}
+.btn2{border:0;border-radius:20px;background:linear-gradient(145deg,#fff,#e4f3e2);color:var(--g);box-shadow:var(--cp);font-family:inherit}
+.btn:active,.btn2:active,.chip:active,.tab:active{transform:scale(.97)}
+.btn:disabled{box-shadow:var(--cp);background:#e5ece3;color:#9aa89c}
+.fld input,.fld select,.addp input,.addp select{border:0;border-radius:16px;background:#fff;box-shadow:var(--ci);font-family:inherit}
+.badge{box-shadow:var(--cp);border:0}
+.ver{background:#e3f5e3}
+.unv{background:#fff3e0;color:#b26a00;border:0}
+.demo{border:0;border-radius:20px;background:#fff4e0;box-shadow:var(--cp)}
+.prac{border-radius:18px;background:#fff;box-shadow:var(--ci)}
+.qty button{border:0;background:linear-gradient(145deg,#fff,#e4f3e2);box-shadow:var(--cp);font-weight:800;color:var(--ink)}
+.th,.ph{border-radius:18px;box-shadow:4px 4px 10px rgba(80,120,80,.2)}
+.pin .dot{filter:drop-shadow(2px 4px 3px rgba(0,0,0,.28))}
+.item{border-top-color:#e8f0e6}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">🌾 Mavuno<span>Farm to plate, no middlemen</span></div>
+  <div class="loc">📍 Kenya · Vihiga</div>
+</header>
+<div class="demo">Demo preview with sample data. Farms, prices and ratings shown here are examples, not real listings.</div>
+<div class="tabs" id="mt" hidden><button class="tab on" data-t="explore">🗺️ Explore</button><button class="tab" data-t="acct">👤 Account</button></div>
+<div class="panel" id="acct" hidden></div>
+<div id="explore">
+<div class="chips" id="chips"></div>
+<div class="map">
+<svg viewBox="0 0 400 300" id="map" role="img" aria-label="Illustrated map of farms near Luanda">
+  <rect width="400" height="300" fill="var(--land)"/>
+  <path d="M0 210 C80 180 120 240 200 215 S330 160 400 190 V300 H0Z" fill="var(--land2)"/>
+  <path d="M-10 90 C60 110 110 60 190 85 S320 140 410 100" stroke="var(--water)" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M40 0 C70 90 130 150 190 300" stroke="var(--road)" stroke-width="5" fill="none"/>
+  <path d="M0 160 C100 150 250 170 400 140" stroke="var(--road)" stroke-width="4" fill="none"/>
+  <path d="M290 0 C270 80 300 200 330 300" stroke="var(--road)" stroke-width="3" fill="none"/>
+  <g font-size="11" fill="var(--mut)" font-weight="600"><text x="168" y="168">Luanda</text><text x="60" y="48">Kima</text><text x="300" y="52">Chavakali</text><text x="230" y="262">Mbale</text></g>
+  <g id="pins"></g>
+</svg>
+<div class="note">Illustrated map · live version uses OpenStreetMap</div>
+</div>
+<div class="panel" id="panel"></div>
+</div>
+<footer>Mavuno · Kenya pilot · Built to connect farmers and households directly</footer>
+</div>
+<script>
+const CATS=[["all","All","🌾"],["beef","Beef","🥩"],["chicken","Chicken","🍗"],["eggs","Eggs","🥚"],["vegetables","Vegetables","🥬"],["milk","Milk","🥛"]];
+const EMO=Object.fromEntries(CATS.map(c=>[c[0],c[2]]));
+const FARMS=[
+{id:1,n:"Amani Greens",o:"Grace A.",a:"Luanda Township",x:178,y:150,v:0,r:"4.8 (14)",p:"Compost and manure only. No synthetic pesticides.",it:[["vegetables","Kales (sukuma)",40,"bunch"],["vegetables","Tomatoes",120,"kg"],["vegetables","Spinach",30,"bunch"]]},
+{id:2,n:"Kilima Poultry",o:"Peter M.",a:"Kima",x:78,y:70,v:1,r:"4.6 (9)",p:"Commercial feed. Vaccinated flock. No hormones.",it:[["chicken","Kienyeji chicken",900,"bird"],["eggs","Eggs (tray of 30)",420,"tray"]]},
+{id:3,n:"Mwangaza Dairy",o:"Esther K.",a:"Chavakali",x:310,y:78,v:0,r:"4.4 (6)",p:"Zero-grazing, 6 cows. Milk cooled same day.",it:[["milk","Fresh milk",70,"litre"],["beef","Beef (fresh cut)",650,"kg"]]},
+{id:4,n:"Shamba Fresh",o:"John O.",a:"Luanda North",x:215,y:118,v:0,r:"4.2 (5)",p:"Uses DAP fertilizer. Spraying only when needed.",it:[["vegetables","Cabbage",60,"head"],["vegetables","Onions",110,"kg"],["eggs","Eggs (tray of 30)",440,"tray"]]},
+{id:5,n:"Baraka Beef Ranch",o:"Samuel W.",a:"Mbale",x:240,y:230,v:1,r:"4.7 (11)",p:"Free-range grazing. No growth hormones.",it:[["beef","Beef (fresh cut)",620,"kg"],["milk","Fresh milk",65,"litre"]]},
+{id:6,n:"Neema Farm",o:"Lucy N.",a:"Luanda South",x:130,y:200,v:0,r:"New",p:"Organic manure. Mixed vegetables and chickens.",it:[["chicken","Kienyeji chicken",950,"bird"],["vegetables","Sweet potatoes",80,"kg"]]}
+];
+let cat="all",sel=null,cart={},done={};
+const $=s=>document.querySelector(s);
+const chipsEl=$("#chips"),pinsEl=$("#pins"),panel=$("#panel");
+function chips(){chipsEl.innerHTML=CATS.map(c=>`<button class="chip ${c[0]===cat?"on":""}" data-c="${c[0]}">${c[2]} ${c[1]}</button>`).join("")}
+function vis(){return FARMS.filter(f=>cat==="all"||f.it.some(i=>i[0]===cat))}
+function pins(){
+  pinsEl.innerHTML=vis().map(f=>{
+    const e=EMO[cat==="all"?f.it[0][0]:cat];
+    const ex=done[f.id]?`<circle cx="9" cy="-6" r="4" fill="#c62828" stroke="#fff" stroke-width="1.5"/>`:"";
+    return `<g class="pin ${sel===f.id?"sel":""}" data-id="${f.id}" transform="translate(${f.x} ${f.y})"><circle class="zone" r="24"/><circle class="dot" r="13"/><text y="5" font-size="13" text-anchor="middle">${e}</text>${ex}</g>`}).join("");
+}
+function home(){
+  const list=vis();
+  panel.innerHTML=`<h2>${list.length} farm${list.length===1?"":"s"} near Luanda</h2>`+
+  list.map(f=>`<div class="card" data-open="${f.id}" style="cursor:pointer"><div class="row"><div><div class="name">${f.n}</div><div class="sub">${f.a} · ★ ${f.r}</div></div><span class="badge ${f.v?"ver":"unv"}">${f.v?"✔ Verified":"Not yet verified"}</span></div></div>`).join("")+
+  `<h2>One platform, no middlemen</h2><div class="card sub">Farmers, FPOs, households and food vendors, bulk buyers like supermarkets and distributors, county agricultural officers, CBFs and partner organizations, all in one place. Buyers deal directly with the farm or FPO, so more of the price stays with the farmer.</div><h2>How it works</h2><div class="steps card">
+  <div class="step"><i>1</i><div><b>Find a farm on the map.</b><br><span class="sub">Pick what you want: beef, chicken, eggs, vegetables, milk.</span></div></div>
+  <div class="step"><i>2</i><div><b>Order and agree on delivery.</b><br><span class="sub">Chat with the farmer to choose pickup or delivery and share the transport cost.</span></div></div>
+  <div class="step"><i>3</i><div><b>Pay on delivery.</b><br><span class="sub">No middlemen. Farmers keep more, households pay less.</span></div></div></div>
+  <h2>Where Mavuno is going</h2><div class="road">
+  <div><b>NOW</b>Farm map, price lists, orders, WhatsApp alerts</div>
+  <div><b>NEXT</b>M-Pesa payments held until delivery is confirmed</div>
+  <div><b>THEN</b>Farmer produce organizations (FPOs) selling in bulk</div>
+  <div><b>THEN</b>Extension officers and NGOs advising farmers</div></div>`;
+}
+function farm(id){
+  const f=FARMS.find(x=>x.id===id);sel=id;
+  const c=cart[id]||(cart[id]={});
+  const items=f.it;
+  const total=items.reduce((s,i,k)=>s+(c[k]||0)*i[2],0);
+  panel.innerHTML=`<button class="link" id="back">← All farms</button>
+  <div class="card" style="margin-top:8px"><div class="row"><div><div class="name">${f.n}</div><div class="sub">${f.o} · ${f.a}</div></div><div class="sub">★ ${f.r}</div></div>
+  ${f.id===1&&S.f.fimg?`<img class="ph" src="${S.f.fimg}" alt="Farm photo">`:""}<div style="margin-top:8px"><span class="badge ${f.v?"ver":"unv"}">${f.v?"✔ Verified by Mavuno team":"Not yet verified"}</span></div>
+  <div class="prac"><b>Farm practices (farmer-declared):</b> ${f.id===1&&(S.f.pest||S.f.fert||S.f.mgmt||S.f.pcm)?[["Pesticides",S.f.pest],["Fertilizers",S.f.fert],["Pest control",S.f.pcm],["Farming method",S.f.mgmt]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]).join(" · "):f.p}</div>
+  <div class="sub">${done[f.id]?"📍 Exact location revealed (red dot on map)":"📍 Approximate area shown. Exact location is shared once you place an order."}</div></div>
+  <div class="card">${items.map((i,k)=>`<div class="item">${i[5]?`<img class="th" src="${i[5]}" alt="">`:""}<div style="flex:1">${EMO[i[0]]} ${i[1]}<div class="price">KES ${i[2]} <span class="sub">/ ${i[3]}${i[4]?" · "+i[4]+" available":""}</span></div></div><div class="qty"><button data-q="${k}" data-d="-1">−</button><span>${c[k]||0}</span><button data-q="${k}" data-d="1">+</button></div></div>`).join("")}
+  <button class="btn" id="order" ${total?"":"disabled"}>${total?`Place order · KES ${total.toLocaleString()} (pay on delivery)`:"Add items to order"}</button></div>${chat(f)}`;
+  pins();
+}
+function placed(id){
+  const f=FARMS.find(x=>x.id===id);done[id]=true;cart[id]={};pins();
+  panel.innerHTML=`<div class="ok"><div class="name">✅ Order sent to ${f.n}</div><ul><li>${f.o} is notified on <b>WhatsApp</b> and in the app.</li><li>Chat to agree on pickup or delivery and the transport cost.</li><li>The farm’s exact location is now revealed on the map.</li><li>Pay when your order arrives.</li></ul></div><button class="btn" id="back">Back to farms</button>`;
+}
+chipsEl.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;sel=null;chips();pins();home()};
+pinsEl.onclick=e=>{const p=e.target.closest(".pin");if(p)farm(+p.dataset.id)};
+panel.onclick=e=>{
+  const o=e.target.closest("[data-open]");if(o)return farm(+o.dataset.open);
+  if(e.target.closest("#back")){sel=null;pins();return home()}
+  const q=e.target.closest("[data-q]");
+  if(q){const c=cart[sel]||(cart[sel]={}),k=+q.dataset.q;c[k]=Math.max(0,(c[k]||0)+ +q.dataset.d);return farm(sel)}
+  const qk=e.target.closest("[data-quick]");if(qk){sendm(qk.dataset.quick);return farm(sel)}
+  if(e.target.closest("[data-send]")){sendm($("#chtin").value.trim());return farm(sel)}
+  if(e.target.closest("#order"))placed(sel);
+};
+const ROLES={buyer:["🛒","Local buyer (household or food vendor)","Order fresh food from nearby farms and FPOs",["Full name","Phone (WhatsApp)","Ward / village"]],farmer:["🧑‍🌾","Farmer","List your farm and sell directly",["Full name","Phone (WhatsApp)","Farm name","Ward / village","County","Directions to your farm (landmarks, road, nearest centre)"]],fpo:["🤝","Farmer produce organization (FPO)","Sell members’ produce in bulk",["Organization name","Registration no.","Contact phone","County"]],officer:["🧑‍💼","County agricultural officer","Confirm verifications, resolve complaints, oversee CBFs",["Full name","Phone","Office or organization","Ward(s) covered","Staff or ID no."]],rider:["🏍️","Boda boda / delivery rider","Deliver orders for farmers and buyers",["Full name","Phone","Ward(s) served","Plate no."]],cbf:["🎓","Community-based facilitator (CBF)","Train and monitor farmers, do verification visits",["Full name","Phone","Ward(s) you serve","Areas you train in (crops, livestock...)","County office or partner you work with"]],ngo:["🏢","NGO or partner organization","Support, train and monitor farmers at scale",["Organization name (e.g. CIDCO, CGA, Vibrant Village)","Registration no.","Contact person and phone","Counties and wards of work","Type of work (training, monitoring, verification)"]],bulk:["🏪","Bulk buyer (supermarket, distributor, restaurant, school)","Buy large quantities straight from FPOs and farms",["Business name","Business registration no.","Contact person and phone","Location and delivery points","What you buy and roughly how much"]]};
+const S={role:null,reg:null,f:{},ot:"v",gps:0,rep:0,inc:"New",rj:"New",vd:0,vf:"none",
+ord:[{f:"Amani Greens",t:"Kales ×3, Tomatoes ×2",amt:360,st:"Delivered"}],
+cx:[{id:1,f:"Shamba Fresh",b:"Wanjiru T.",r:"Poor quality",d:"Tomatoes arrived soft and spoiled. Photos attached.",st:"open"}],
+vq:[{id:2,n:"Kilima Poultry",w:"Kima",stage:"review"},{id:3,n:"Neema Farm",w:"Luanda South",stage:"visit"}],tr:[["Safe use of pesticides","Saturday · Luanda social hall",18],["Composting and soil health","Next week · Kima",12]],nt:[],ch:{1:[]},fs:[["Tomatoes (sample)",100,"500 kg available",""]],pg:"",mode:"",auth:0,hr:[{to:"cbf",f:"Peter M. (Kilima Poultry)",t:"Chickens are coughing, need advice",st:"new"}],bq:[{id:1,b:"Sample Supermarket",p:"Tomatoes",q:"300 kg weekly",st:"open"}],
+prods:[["vegetables","Kales (sukuma)",40,"bunch"]]};
+const A=$("#acct");
+const fld=(l,k,t="text")=>`<label class="fld">${l}<input data-k="${k}" type="${t}" value="${S.f[k]||""}"></label>`;
+const pill=(t,c)=>`<span class="badge ${c}">${t}</span>`;
+const cxl=c=>`<div class="item"><div>${c.r}<div class="sub">${c.b}: ${c.d}</div></div>${c.st==="open"?pill("Open","unv"):pill(c.st,"ver")}</div>`;
+function acct(){
+ if(!S.auth&&S.mode!=="su")return A.innerHTML=authHtml();
+ if(!S.role){
+  if(!S.reg)return A.innerHTML=`<button class="link" data-a="out">← Back to sign in</button><h2 style="margin-top:0">Create your Mavuno account</h2><div class="prac">Demo tip: follow one order end to end. Buyer reports a problem, then switch to Officer to resolve it. Farmer signs up, then a CBF visits, then the Officer confirms the badge. A farmer asks for help and a CBF replies. A supermarket posts a bulk request and the FPO quotes.</div>`+Object.entries(ROLES).map(([k,r])=>`<div class="card" data-a="reg" data-v="${k}" style="cursor:pointer"><div class="name">${r[0]} ${r[1]}</div><div class="sub">${r[2]}</div></div>`).join("");
+  const r=ROLES[S.reg];
+  return A.innerHTML=`<button class="link" data-a="reset">← Back</button><h2>${r[0]} ${r[1]}</h2><div class="card">${r[3].map((l,i)=>fld(l,"r"+i)).join("")}${S.reg==="farmer"?`<p class="sub">After you sign up, a CBF visits to verify your farm using your directions. No request needed.</p>`:""}${["officer","cbf","ngo"].includes(S.reg)?`<p class="sub">Accounts for officers, CBFs and partner organizations are approved by the county agricultural office and Mavuno admins before going live.</p>`:""}<button class="btn" data-a="join">Create account</button></div>`;
+ }
+ const r=ROLES[S.role];
+ A.innerHTML=`<div class="row"><h2 style="margin:6px 0">${r[0]} ${r[1].split(" (")[0]}</h2><button class="link" data-a="reset">Switch role</button> · <button class="link" data-a="out">Sign out</button></div>`+(PAGES[S.role]?`<div class="tabs">${PAGES[S.role].map(p=>`<button class="tab ${S.pg===p[0]?"on":""}" data-a="pg" data-v="${p[0]}">${p[1]}</button>`).join("")}</div>`:"")+({farmer,buyer,officer,fpo,rider,cbf,ngo,bulk}[S.role])()+(S.role==="officer"||S.role==="ngo"?hrl(S.role):"");pgApply();
+}
+function farmer(){
+ const vs={none:pill("Not verified","unv"),pending:pill("Awaiting visit","unv"),verified:pill("✔ Verified","ver")}[S.vf];
+ const mine=S.cx.filter(c=>c.f==="Amani Greens");
+ return `<div class="card"><div class="row"><div><div class="name">Amani Greens</div><div class="sub">Luanda Township · Vihiga</div></div>${vs}</div></div>
+<div class="card"><b>1. Farm location and directions</b>${fld("Directions (landmarks, road, nearest centre)","r5")}${ph("Farm photo (optional)","fimg")}<div class="sub">${S.gps?"📍 Pin saved. Buyers see only a ~100 m area until they order.":"Stand on your farm and tap below, or drop the pin on the map."}</div><button class="btn2" data-a="gps">${S.gps?"Re-capture GPS pin":"📍 Use my phone GPS"}</button></div>
+<div class="card"><b>2. Farm practices</b>${fld("Pesticides used","pest")}${fld("Fertilizers used","fert")}${fld("Pest control method (e.g. neem spray, traps)","pcm")}${fld("How the farm is managed","mgmt")}<div class="sub" style="margin-top:8px">Shown to buyers as farmer-declared.</div></div>
+<div class="card"><b>3. Products and prices</b>${S.prods.map(p=>`<div class="item">${p[5]?`<img class="th" src="${p[5]}" alt="">`:""}<div style="flex:1">${EMO[p[0]]} ${p[1]}</div><div class="price">KES ${p[2]}/${p[3]}${p[4]?" · "+p[4]:""}</div></div>`).join("")}<div class="addp"><select data-k="pc">${CATS.slice(1).map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("")}</select><input data-k="pn" placeholder="Item name" value="${S.f.pn||""}"><input data-k="pp" type="number" placeholder="Price KES" value="${S.f.pp||""}"><input data-k="pu" placeholder="Unit (kg, bunch, tray)" value="${S.f.pu||""}"><input data-k="pq" placeholder="Quantity available (e.g. 300 kg)" value="${S.f.pq||""}"></div>${ph("Photo of this product","pimg")}<button class="btn2" data-a="addp">+ Add product</button></div>
+<div class="card"><b>4. Verification</b><div class="sub">${{none:"After you sign up, our team visits your farm.",pending:"Nothing to request. A CBF will visit using your directions to check your location, practices and produce, then the county officer confirms your badge.",verified:"Your farm now carries the verified badge on the map."}[S.vf]}</div></div>
+<div class="card"><b>Messages from buyers</b>${(S.ch[1]||[]).length?S.ch[1].map(x=>`<div class="item"><div>${x[0]==="you"?"Buyer":"You"}: ${x[1]}</div></div>`).join("")+fld("Reply to buyer","fr")+`<button class="btn2" data-a="freply">Send reply</button>`:`<div class="sub">No messages yet. Buyers who want your produce will message you here.</div>`}</div>
+<div class="card"><b>Get help</b><div class="sub">Reach out to a CBF, the county agricultural officer or a partner organization whenever you need advice.</div><label class="fld">Who do you want to ask?<select data-k="ht"><option value="cbf">Community-based facilitator</option><option value="officer">County agricultural officer</option><option value="ngo">Partner organization</option></select></label>${fld("What do you need help with?","hn")}<button class="btn2" data-a="ask">Send request</button>${S.hr.filter(h=>h.mine).map(h=>`<div class="item"><div>${h.t}<div class="sub">To: ${{cbf:"CBF",officer:"County officer",ngo:"Partner organization"}[h.to]}</div></div>${h.st==="new"?pill("Sent","unv"):pill("Answered","ver")}</div>`).join("")}</div>
+<div class="card"><b>Incoming order</b><div class="sub">Wanjiru T. · Kales ×3, Tomatoes ×2 · KES 360 · pay on delivery</div>${S.inc==="New"?`<button class="btn2" data-a="acc">Accept order</button>`:`<div class="sub">Accepted. Chat with the buyer to arrange delivery.</div>`}</div>
+${S.nt.length?`<div class="card"><b>Notices from partners</b>${S.nt.map(n=>`<div class="item"><div>${n}</div></div>`).join("")}</div>`:""}${mine.length?`<div class="card"><b>Complaints about my farm</b>${mine.map(cxl).join("")}</div>`:""}`;
+}
+function buyer(){
+ const o=S.ord[0];
+ return `<div class="card"><b>My orders</b><div class="item"><div>${o.f}<div class="sub">${o.t} · KES ${o.amt}</div></div>${pill(o.st,o.st==="Delivered"?"ver":"unv")}</div>${o.st==="Delivered"?(S.rep?`<div class="prac"><b>Report a problem</b> (within 24 h of delivery)<label class="fld">What went wrong<select data-k="rr"><option>Poor quality</option><option>Wrong or missing items</option><option>Farmer did not deliver</option></select></label>${fld("Details","rd")}<div class="sub" style="margin-top:8px">📷 Add at least one photo as evidence (demo)</div><button class="btn" data-a="sub">Send to an extension officer</button></div>`:`<button class="btn2" data-a="rep">Report a problem with this order</button>`):""}</div>
+${S.cx.filter(c=>c.b==="You").map(c=>`<div class="card"><b>My complaint</b>${cxl(c)}</div>`).join("")}<div class="card"><b>Reviews</b><div class="sub">Rate each farm after delivery to help other households.</div></div>`;
+}
+function officer(){
+ const open=S.cx.filter(c=>c.st==="open"),rq=S.vq.filter(q=>q.stage==="review");
+ const t=`<div class="tabs"><button class="tab ${S.ot==="v"?"on":""}" data-a="ot" data-v="v">Confirm verification (${rq.length})</button><button class="tab ${S.ot==="c"?"on":""}" data-a="ot" data-v="c">Complaints (${open.length})</button></div>`;
+ if(S.ot==="v")return t+(rq.length?rq.map(q=>`<div class="card"><div class="name">${q.n}</div><div class="sub">${q.w} · CBF visit completed, report submitted</div><div class="chk">☐ GPS pin matches the farm · ☐ Declared practices confirmed · ☐ Produce seen on site</div><div class="row2"><button class="btn" data-a="ok" data-v="${q.id}">Approve</button><button class="btn2" data-a="no" data-v="${q.id}">Reject</button></div></div>`).join(""):`<div class="card sub">No farms waiting. ${S.vd} verified this session.</div>`);
+ return t+(S.cx.length?S.cx.map(c=>`<div class="card"><div class="row"><div class="name">${c.f}</div>${c.st==="open"?pill("Open","unv"):pill(c.st,"ver")}</div><div class="sub">Buyer: ${c.b} · ${c.r}</div><div class="prac">${c.d}<br><b>Rules check:</b> reported within 24 h ✔ · photo evidence ✔</div>${c.st==="open"?`<div class="row2"><button class="btn2" data-a="res" data-v="${c.id}" data-o="Refunded buyer">Refund buyer</button><button class="btn2" data-a="res" data-v="${c.id}" data-o="Partial refund">Partial refund</button><button class="btn2" data-a="res" data-v="${c.id}" data-o="Dismissed">Dismiss</button></div>`:""}</div>`).join(""):`<div class="card sub">No complaints.</div>`);
+}
+function fpo(){return `<div class="card"><div class="name">Luanda Farmers’ Produce Organization</div><div class="sub">Vihiga County · sample FPO</div></div><div class="card"><b>Stock listed by the FPO</b>${S.fs.map(s=>`<div class="item">${s[3]?`<img class="th" src="${s[3]}" alt="">`:""}<div style="flex:1">${s[0]}<div class="sub">${s[2]}</div></div><div class="price">KES ${s[1]}</div></div>`).join("")}<div class="addp"><input data-k="sn" placeholder="Product" value="${S.f.sn||""}"><input data-k="sp" type="number" placeholder="Price KES" value="${S.f.sp||""}"><input data-k="sq" placeholder="Quantity (e.g. 500 kg)" value="${S.f.sq||""}"></div>${ph("Photo of the stock","simg")}<button class="btn2" data-a="addstk">+ List stock</button></div>
+<div class="card"><b>Member farmers</b>${[["Grace A.","120 kg tomatoes"],["Peter M.","40 trays of eggs"],["Lucy N.","60 kg sweet potatoes"]].map(m=>`<div class="item"><div>${m[0]}</div><div class="sub">${m[1]} this week</div></div>`).join("")}<button class="btn2" data-a="noop">+ Invite a farmer</button></div><div class="card"><b>Bulk requests from supermarkets and distributors</b>${S.bq.map(r=>`<div class="item"><div>${r.b}<div class="sub">${r.p} · ${r.q}</div></div>${r.st==="open"?`<button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="quote" data-v="${r.id}">Send quote</button>`:pill("Quoted","ver")}</div>`).join("")}</div><div class="card"><b>Bulk listing and payouts</b><div class="sub">Members’ produce is listed under the FPO. When it sells, the FPO keeps the commission it sets and pays the rest to each member directly or through their savings group.</div></div>`}
+function rider(){return `<div class="card"><b>Delivery jobs near you</b><div class="item"><div>Amani Greens to Luanda Market Rd<div class="sub">Fee agreed with the farmer: KES 100</div></div>${S.rj==="New"?`<button class="btn2" style="width:auto;margin:0;padding:8px 14px" data-a="job">Accept</button>`:pill("Accepted","ver")}</div></div>`}
+function cbf(){
+ const todo=S.vq.filter(q=>q.stage==="visit");
+ return `<div class="card"><div class="name">Community-based facilitator</div><div class="sub">Works with the county agricultural office · Luanda ward</div></div>
+<div class="card"><b>Farm visits to do (${todo.length})</b>${todo.length?todo.map(q=>`<div class="item"><div>${q.n}<div class="sub">${q.w} · verification visit</div><div class="chk">${q.id==="A"?"Directions from the farmer: "+(S.f.r5||"not provided"):"Directions posted by the farmer"}. Check the GPS pin, declared practices and produce on site.</div></div><button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="vis" data-v="${q.id}">Submit report</button></div>`).join(""):`<div class="sub">No visits waiting.</div>`}<div class="sub" style="margin-top:8px">Your report goes to the county agricultural officer, who confirms the verified badge.</div></div>
+<div class="card"><b>Training sessions</b>${S.tr.map(t=>`<div class="item"><div>${t[0]}<div class="sub">${t[1]}</div></div>${pill(t[2]+" farmers","ver")}</div>`).join("")}${fld("New session topic","tt")}<button class="btn2" data-a="trn">+ Schedule a training</button></div>
+${hrl("cbf")}`;
+}
+function ngo(){
+ const k=(n,l)=>`<div class="card" style="flex:1;margin:0"><b>${n}</b><div class="sub">${l}</div></div>`;
+ return `<div class="card"><div class="name">Vibrant Village (demo)</div><div class="sub">Vihiga County · works with the county agricultural office</div></div>
+<div class="card"><b>Programme reach (sample figures)</b><div class="row2" style="margin-top:8px">${k(126,"farmers enrolled")}${k(8,"CBFs working with us")}${k(41,"farms verified")}</div></div>
+<div class="card"><b>Partner organizations in this demo</b><div class="sub">CIDCO · CGA · Vibrant Village. These names are examples only, not confirmed partners.</div></div>
+<div class="card"><b>What partners can do</b><div class="sub">• Answer help requests and offer services farmers can ask for<br>• Fund and track trainings and farm visits<br>• Send advice, alerts and training notices to farmers<br>• See verification and complaint trends for your programme</div></div>
+<div class="card"><b>Send a notice to farmers</b>${fld("Notice","nn")}<button class="btn2" data-a="note">Publish notice</button>${S.nt.map(n=>`<div class="item"><div>${n}</div>${pill("Sent","ver")}</div>`).join("")}<div class="sub" style="margin-top:8px">Notices show up on farmer dashboards.</div></div>`;
+}
+const PAGES={farmer:[["pro","Profile"],["prd","Products"],["ord","Orders"],["hlp","Help"]],fpo:[["mem","Members"],["stk","Stock"],["bulk","Bulk"],["pay","Payouts"]],cbf:[["vis","Visits"],["trn","Training"],["hlp","Requests"]]};
+const PGM=[["1. Farm","pro"],["2. Farm","pro"],["4. Verif","pro"],["3. Prod","prd"],["Messages","ord"],["Incoming","ord"],["Get help","hlp"],["Notices","hlp"],["Complaints","hlp"],["Stock listed","stk"],["Member farmers","mem"],["Bulk requests","bulk"],["Bulk listing","pay"],["Farm visits","vis"],["Training sessions","trn"],["Help requests","hlp"]];
+function pgApply(){const p=PAGES[S.role];if(!p)return;if(!p.some(x=>x[0]===S.pg)){S.pg=p[0][0];return acct()}A.querySelectorAll(".card").forEach(c=>{const b=c.firstElementChild;if(!b||b.tagName!=="B")return;const m=PGM.find(x=>b.textContent.startsWith(x[0]));c.hidden=!!m&&m[1]!==S.pg})}
+function syncTabs(){$("#mt").hidden=!S.auth;if(!S.auth){$("#explore").hidden=true;A.hidden=false}document.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",(x.dataset.t==="explore")===!$("#explore").hidden))}
+const ph=(l,k)=>`<label class="fld">${l}<input type="file" accept="image/*" data-img="${k}"></label>${S.f[k]?`<img class="ph" src="${S.f[k]}" alt="">`:""}`;
+const img=(f,cb)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,480/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};i.src=r.result};r.readAsDataURL(f)};
+A.onchange=e=>{const t=e.target,f=t.files&&t.files[0];if(t.dataset.img&&f)img(f,u=>{S.f[t.dataset.img]=u;acct()})};
+const authHtml=()=>`<div style="text-align:center;padding:10px 0"><div class="logo" style="font-size:30px">🌾 Mavuno</div><p class="sub">Buy and sell farm produce directly. Farmers, FPOs, buyers, officers and partners in one place.</p></div><div class="card"><b>New here?</b><button class="btn" data-a="su">Create account</button></div><div class="card"><b>Sign in</b>${fld("Phone number","lph")}${fld("PIN","lpw","password")}<label class="fld">Demo: sign in as (any phone and PIN works)<select data-k="lrl">${Object.entries(ROLES).map(([k,r])=>`<option value="${k}">${r[1].split(" (")[0]}</option>`).join("")}</select></label><button class="btn" data-a="si">Sign in</button></div><button class="link" data-a="browse">Just looking? View the map</button>`;
+const hrl=r=>{const l=S.hr.map((h,i)=>[h,i]).filter(x=>x[0].to===r);return `<div class="card"><b>Help requests from farmers (${l.filter(x=>x[0].st==="new").length} new)</b>${l.length?l.map(x=>`<div class="item"><div>${x[0].f}<div class="sub">${x[0].t}</div></div>${x[0].st==="new"?`<button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="ans" data-v="${x[1]}">Reply</button>`:pill("Answered","ver")}</div>`).join(""):`<div class="sub">No requests yet. Farmers contact you directly when they need help.</div>`}</div>`};
+const sendm=t=>{if(!t)return;(S.ch[sel]=S.ch[sel]||[]).push(["you",t]);if(sel!==1)S.ch[sel].push(["farm","Karibu! Yes, we can pack that. Pay on delivery works for us. (demo auto-reply)"])};
+const chat=f=>{const m=S.ch[f.id]||[],q=f.it[f.it.length-1];return `<div class="card"><b>Chat with ${f.o}</b><div class="sub">Anyone can message a farm. Agree on the amount, packing, delivery and payment terms.</div>${m.map(x=>`<div class="item" style="justify-content:${x[0]==="you"?"flex-end":"flex-start"}"><div class="prac" style="margin:0;max-width:85%">${x[1]}</div></div>`).join("")}<div class="row2"><button class="btn2" data-quick="I would like ${q[1]} worth KES 300. Can you pack it?">KES 300 of ${q[1]}</button><button class="btn2" data-quick="What are your payment terms?">Payment terms?</button></div><label class="fld">Your message<input id="chtin" placeholder="Type a message"></label><button class="btn" data-send="1">Send</button></div>`};
+function bulk(){return `<div class="card"><div class="name">Sample supermarket</div><div class="sub">Buy in bulk straight from FPOs and farms, no middlemen</div></div>
+<div class="card"><b>Post a bulk request</b>${fld("Product (e.g. Tomatoes)","bp")}${fld("Quantity and how often (e.g. 300 kg weekly)","bq2")}<button class="btn" data-a="bpost">Send to FPOs and farms</button></div>
+<div class="card"><b>My requests</b>${S.bq.map(r=>`<div class="item"><div>${r.p}<div class="sub">${r.q}</div></div>${r.st==="open"?pill("Waiting for quotes","unv"):pill("Quote received","ver")}</div>`).join("")}</div>`}
+A.onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,v=b.dataset.v;
+ if(a==="reg")S.reg=v;else if(a==="reset")S.role=S.reg=null;else if(a==="join"){S.role=S.reg;S.auth=1;S.mode="";if(S.reg==="farmer"&&S.vf==="none"&&!S.vq.some(q=>q.id==="A")){S.vf="pending";S.vq.unshift({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}}
+ else if(a==="gps")S.gps=1;
+ else if(a==="addp"){const f=S.f;if(f.pn&&f.pp){const it=[f.pc||"vegetables",f.pn,+f.pp,f.pu||"kg",f.pq||"",f.pimg||""];S.prods.push(it);FARMS[0].it.push(it);f.pn=f.pp=f.pu=f.pq=f.pimg=""}}
+ else if(a==="reqv"){S.vf="pending";S.vq.unshift({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}
+ else if(a==="acc")S.inc="OK";else if(a==="rep")S.rep=1;
+ else if(a==="sub"){S.cx.unshift({id:9,f:"Amani Greens",b:"You",r:S.f.rr||"Poor quality",d:S.f.rd||"No details given",st:"open"});S.ord[0].st="Complaint filed";S.rep=0}
+ else if(a==="ot")S.ot=v;
+ else if(a==="ok"||a==="no"){S.vq=S.vq.filter(q=>String(q.id)!==v);if(a==="ok")S.vd++;if(v==="A"){S.vf=a==="ok"?"verified":"pending";FARMS[0].v=a==="ok"?1:0;if(a==="no")S.vq.push({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}}
+ else if(a==="res")S.cx.find(x=>x.id==v).st=b.dataset.o;
+ else if(a==="job")S.rj="OK";
+ else if(a==="vis"){const q=S.vq.find(x=>String(x.id)===v);if(q)q.stage="review"}
+ else if(a==="trn"){if(S.f.tt){S.tr.push([S.f.tt,"Date to be set",0]);S.f.tt=""}}
+ else if(a==="note"){if(S.f.nn){S.nt.unshift(S.f.nn);S.f.nn=""}}
+ else if(a==="ask"){if(S.f.hn){S.hr.push({to:S.f.ht||"cbf",f:"Grace A. (Amani Greens)",t:S.f.hn,st:"new",mine:1});S.f.hn=""}}
+ else if(a==="ans")S.hr[+v].st="done";
+ else if(a==="su")S.mode="su";
+ else if(a==="si"){S.role=S.f.lrl||"buyer";S.auth=1}
+ else if(a==="out"){S.auth=0;S.mode="";S.role=S.reg=null}
+ else if(a==="browse"){S.auth=1;S.role=null;$('[data-t="explore"]').click()}
+ else if(a==="pg")S.pg=v;
+ else if(a==="addstk"){const f=S.f;if(f.sn&&f.sp){S.fs.push([f.sn,+f.sp,f.sq||"",f.simg||""]);f.sn=f.sp=f.sq=f.simg=""}}
+ else if(a==="freply"){if(S.f.fr){(S.ch[1]=S.ch[1]||[]).push(["farm",S.f.fr]);S.f.fr=""}}
+ else if(a==="quote")S.bq.find(r=>r.id==v).st="quoted";
+ else if(a==="bpost"){if(S.f.bp&&S.f.bq2){S.bq.unshift({id:Date.now(),b:"Your business",p:S.f.bp,q:S.f.bq2,st:"open"});S.f.bp=S.f.bq2=""}}
+ acct();syncTabs()};
+A.oninput=e=>{const k=e.target.dataset.k;if(k)S.f[k]=e.target.value};
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=b.dataset.t;$("#explore").hidden=t!=="explore";A.hidden=t!=="acct";document.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",x===b));if(t==="acct")acct()});
+chips();pins();home();$("#explore").hidden=true;A.hidden=false;acct();
+</script>
+</body>
+</html>
