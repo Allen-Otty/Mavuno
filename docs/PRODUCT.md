@@ -115,7 +115,8 @@ Open decision: how Mavuno earns. Options discussed: commission on payments made 
 | Disputes | Rule-based, officers as last resort |
 | Verification | Initiated by the team after sign-up, not requested by farmers |
 | Build | PWA first, then a mobile app. Timeline can stretch; scope is not cut |
-| UI | Claymorphism style on a white background |
+| UI | Claymorphism style on a white background. Dashboard layout modelled on the PharmaLy app: dark-green sidebar with lime highlight, top bar with breadcrumbs, search, notifications and profile, user card at the bottom of the sidebar |
+| Feed | A TikTok-style vertical swipe feed of produce (one item per screen with Chat, Order and Like buttons) next to the map view |
 
 ## 7. Open questions
 
@@ -124,3 +125,16 @@ Open decision: how Mavuno earns. Options discussed: commission on payments made 
 - How a bulk order proceeds after a quote.
 - Which countries after Kenya.
 - App name availability (Play Store, domain).
+
+## 8. Vihiga County Call Centre proposal: how it is incorporated
+
+The founder has permission to use the Vihiga County Call Centre proposal (M-Advisory / Ushauri AgriCall). What it adds to Mavuno:
+
+- **Help by phone, WhatsApp or in-app, in the farmer's language.** A farmer chooses who to ask (CBF, county officer, partner organization, paravet or agrovet), how they want to be reached (phone call, WhatsApp, in-app chat) and the language (English, Swahili, Luhya or another local language). The proposal's model of routing a call to a pool of experts or lead farmers maps to CBFs and officers. A real call or USSD line is a later phase.
+- **Learn page for farmers.** Practice guides taken from the proposal: greenhouse and high tunnel basics, vertical gardens and bags, organic fertilizer support, water supply options, solar drying and value addition, and one-cow silage.
+- **County fresh packs.** FPOs can list bundled, county-branded fresh packs alongside single products.
+- **New accounts.** Agrovet / input supplier and paravet / animal health worker, approved before going live.
+- **Indigenous vegetable pilot.** The proposal's Vihiga indigenous vegetable project (2,000 farmers, 100 acres, a supermarket buyer) is a candidate anchor supply and bulk-buyer pilot. Confirm which partners are still involved.
+- **Later:** an agri-shop for ordering inputs, and cooperative savings and loans linked to FPO payouts.
+
+Not used: the "farming by blood type" slides (no scientific basis) and the proposal's revenue projections (they assume very fast growth in call minutes and need evidence before reuse).

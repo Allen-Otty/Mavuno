@@ -46,3 +46,13 @@ The demo shrinks images in the browser and keeps them in memory. The real app sh
 ## Demo versus real app
 
 The demo (`index.html`) shows the structure, screens and flows. It has no backend: sign-in accepts any phone and PIN, and refreshing the page resets everything.
+
+## PWA (installable app)
+
+The demo is a Progressive Web App: `index.html`, `manifest.webmanifest`, `sw.js` and `icons/` at the repo root.
+
+- **Install:** open the GitHub Pages link in Chrome on Android and tap **Install app** (or the browser menu, then Install). On iPhone, use Share, then Add to Home Screen.
+- **Offline:** the service worker caches the app so it opens without a connection. Live data will still need a connection once the Supabase back end is connected.
+- **Updating:** when you change `index.html`, edit `const V = "mavuno-v1"` in `sw.js` to a new number (v2, v3...) so phones fetch the new version.
+- **Requires HTTPS.** GitHub Pages provides it.
+- **Not included yet:** push notifications and background sync. WhatsApp notifications will come from a server function, not from the PWA.
