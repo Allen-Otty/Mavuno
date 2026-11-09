@@ -47,6 +47,25 @@ nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;paddi
 #pick{background:#fff3cd;color:#664d03;padding:10px 14px;text-align:center;font-weight:600}
 .msgs{max-height:220px;overflow:auto;margin:8px 0}.m{padding:6px 10px;border-radius:14px;margin:3px 0;max-width:80%;background:var(--g2)}.m.me{margin-left:auto;background:var(--g);color:#fff}
 img.ph{width:54px;height:54px;object-fit:cover;border-radius:12px}.pr{display:flex;gap:10px;align-items:center;margin:8px 0}.pr>div{flex:1}.pr input{width:72px}
+
+.abg{position:fixed;inset:0;z-index:-1;background:linear-gradient(118deg,transparent 36%,rgba(232,170,60,.6) 36.4%,transparent 37.6%),linear-gradient(123deg,transparent 45%,rgba(255,214,90,.4) 45.3%,transparent 46.4%),linear-gradient(112deg,transparent 56%,rgba(190,120,30,.35) 56.5%,transparent 58%),radial-gradient(90% 70% at 8% 12%,rgba(176,112,24,.55),transparent 60%),radial-gradient(70% 60% at 100% 100%,rgba(120,80,20,.5),transparent 60%),#0a0a0a}
+.awrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 18px) 16px 24px}
+.abrand{color:#fff;font-size:30px;font-weight:800;margin-bottom:14px}.abrand i{color:#ffd23f}
+.glass{width:100%;max-width:430px;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06));clip-path:polygon(30px 0,100% 0,100% calc(100% - 30px),calc(100% - 30px) 100%,0 100%,0 30px);animation:pop .4s ease}
+.gi{background:rgba(16,16,16,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:26px 22px 20px;color:#fff;clip-path:polygon(30px 0,100% 0,100% calc(100% - 30px),calc(100% - 30px) 100%,0 100%,0 30px)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}}
+.gi h2{margin:0;font-size:28px}.gi h2 em{font-style:normal;color:#ffd23f}.gi .sub{color:#a8a8a8;font-size:13px;margin:2px 0 14px}
+.lb{display:block;font-size:13px;font-weight:600;margin-top:10px}
+.f{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:0 12px;margin:5px 0;color:#9a9a9a}
+.f:focus-within{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.18)}
+.f input,.f select{border:0;background:none;color:#fff;margin:0;padding:12px 0;border-radius:0;outline:0}.f select option{color:#000}
+.eye{background:none;color:#ffd23f;padding:4px 0;font-size:12px;flex:0 0 auto;border-radius:6px}
+.gi .err{color:#ff8a80}.gi .f:has(.bad){border-color:#ff6b6b}
+.opts{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:12px 0;gap:8px}.opts label{display:flex;align-items:center;gap:6px}.opts input{width:auto;margin:0;accent-color:#ffd23f}
+.gi a{color:#ffd23f;font-weight:600}.gi .mut{color:#a8a8a8}
+.go{width:100%;background:linear-gradient(180deg,#ffe14d,#f5c400);color:#111;box-shadow:0 6px 26px rgba(255,208,0,.35);margin-top:6px;font-size:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.splash{background:#0a0a0a}.splash i{color:#ffd23f}
 </style>
 </head>
 <body>
@@ -68,7 +87,7 @@ const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false;
 const nice = m => /invalid login/i.test(m) ? "Wrong email or password." : /not confirmed/i.test(m) ? "Please confirm your email first. Check your inbox and spam." : m;
 const guard = f => async (...a) => { try { await f(...a); } catch (x) { toast(nice(x.message || String(x))); } };
 const hideSplash = () => setTimeout(() => { const s = $("#splash"); if (s) { s.classList.add("off"); setTimeout(() => s.remove(), 500); } }, Math.max(0, 900 - (Date.now() - S.t0)));
-function check(el) { const v = el.value, m = el.name === "email" && !/^\S+@\S+\.\S+$/.test(v.trim()) ? "That email doesn't look right." : el.name === "password" && v.length < 6 ? "Use 6 or more characters." : ""; const s = el.nextElementSibling; if (s && s.classList.contains("err")) s.textContent = m; el.classList.toggle("bad", !!m); return !m; }
+function check(el) { const v = el.value, m = el.name === "email" && !/^\S+@\S+\.\S+$/.test(v.trim()) ? "That email doesn't look right." : el.name === "password" && v.length < 6 ? "Use 6 or more characters." : el.name === "confirm" && v !== el.form.password.value ? "Passwords don't match." : ""; const s = (el.closest(".f") || el).nextElementSibling; if (s && s.classList.contains("err")) s.textContent = m; el.classList.toggle("bad", !!m); return !m; }
 const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: undefined, t0: Date.now(), cat: "All" };
 let M = null, pickCb = null;
 
@@ -90,18 +109,24 @@ async function initMap() {
 }
 
 // ---- Auth screens
+const IC = { mail: '<path d="M3 6h18v12H3zM3 6l9 7 9-7"/>', lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>', phone: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>', pin: '<path d="M12 21s7-6 7-12a7 7 0 10-14 0c0 6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>' };
+const ic = k => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
+const fld = (label, icon, input, extra = "") => `<label class="lb">${label}</label><div class="f">${ic(icon)}${input}${extra}</div><small class="err"></small>`;
+const eye = `<button type="button" class="eye" data-a="eye">Show</button>`;
 function authView(mode = "in") {
   const up = mode === "up";
-  $("#app").innerHTML = `<div class="hero"><b>Mavuno<i>.</i></b><span>Fresh from the farm, straight to you</span></div><div class="auth"><h2>${up ? "Create account" : "Welcome back"}</h2>
+  $("#app").innerHTML = `<div class="abg"></div><div class="awrap"><div class="abrand">Mavuno<i>.</i></div><div class="glass"><div class="gi">
+  <h2>${up ? "Create <em>Account</em>" : "Welcome <em>Back</em>"}</h2><div class="sub">${up ? "Join Mavuno to buy or sell fresh produce" : "Sign in to your Mavuno account"}</div>
   <form data-f="${mode}" novalidate>
-  ${up ? `<input name="full_name" placeholder="Full name" required><input name="phone" placeholder="Phone (07…)" inputmode="tel" required><input name="county" placeholder="County" required>
-  <select name="role"><option value="buyer">I want to buy</option><option value="farmer">I am a farmer</option></select>` : ""}
-  <input name="email" type="email" placeholder="Email" required autocomplete="email"><small class="err"></small>
-  <input name="password" type="password" placeholder="Password (6+ characters)" required autocomplete="${up ? "new-password" : "current-password"}"><small class="err"></small>
-  <button class="btn" style="width:100%;margin-top:8px">${up ? "Create account" : "Log in"}</button></form>
-  <p class="mut c">${up ? `Have an account? <a href="#" data-a="auth" data-m="in">Log in</a>` : `New here? <a href="#" data-a="auth" data-m="up">Sign up</a> · <a href="#" data-a="reset">Forgot password?</a>`}</p>
-  ${up ? `<p class="mut c small">No email address? Make a free Gmail account first, then sign up here.</p>` : ""}</div>`;
-  hideSplash();
+  ${up ? fld("Full name", "user", `<input name="full_name" placeholder="Your name" required autocomplete="name">`) + fld("Phone", "phone", `<input name="phone" placeholder="07…" inputmode="tel" required autocomplete="tel">`) + fld("County", "pin", `<input name="county" placeholder="e.g. Meru" required>`) + fld("I am a", "user", `<select name="role"><option value="buyer">Buyer</option><option value="farmer">Farmer</option></select>`) : ""}
+  ${fld("Email address", "mail", `<input name="email" type="email" placeholder="name@domain.com" required autocomplete="email">`)}
+  ${up ? `<div class="two"><div>${fld("Password", "lock", `<input name="password" type="password" placeholder="Password" required autocomplete="new-password">`, eye)}</div><div>${fld("Confirm", "lock", `<input name="confirm" type="password" placeholder="Repeat" required autocomplete="new-password">`)}</div></div>
+  <div class="opts"><label><input type="checkbox" name="terms"> I agree to the Terms and Privacy Policy</label></div>`
+    : fld("Password", "lock", `<input name="password" type="password" placeholder="Your password" required autocomplete="current-password">`, eye) + `<div class="opts"><label><input type="checkbox" name="rem" checked> Remember me</label><a href="#" data-a="reset">Forgot password?</a></div>`}
+  <button class="go">${up ? "Create Account" : "Sign In"} →</button></form>
+  <p class="mut c small" style="margin:14px 0 0">${up ? `Already have an account? <a href="#" data-a="auth" data-m="in">Sign in</a>` : `Don't have an account? <a href="#" data-a="auth" data-m="up">Sign up</a>`}</p>
+  ${up ? `<p class="mut c small" style="margin:6px 0 0">No email? Make a free Gmail first.</p>` : ""}</div></div></div>`;
+  document.body.style.background = "#0a0a0a"; hideSplash();
 }
 
 // ---- App shell
@@ -115,7 +140,7 @@ function shell() {
   <section id="v-map" hidden><div id="map"></div></section>
   <section id="v-orders" hidden></section><section id="v-farm" hidden></section>
   <nav>${n("home", "🏠", "Home")}${n("map", "📍", "Map")}${n("orders", "🧾", "Orders")}${fm ? n("farm", "🌱", "My farm") : ""}</nav><div id="sheet" hidden></div>`;
-  show("home"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message)); hideSplash();
+  document.body.style.background = ""; show("home"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message)); hideSplash();
 }
 function show(v) {
   S.v = v; stopChat();
@@ -215,6 +240,7 @@ const farmView = guard(async () => {
 // ---- Click and submit handlers
 const A = {
   auth: d => authView(d.m),
+  eye: (d, b) => { const i = b.closest(".f").querySelector("input"); i.type = i.type === "password" ? "text" : "password"; b.textContent = i.type === "password" ? "Show" : "Hide"; },
   cat: d => { S.cat = d.c; drawFarms(); },
   reset: guard(async () => { const e = prompt("Your account email"); if (!e) return; ok(await sb.auth.resetPasswordForEmail(e, { redirectTo: location.href.split("#")[0] })); toast("Check your email for the reset link."); }),
   out: () => sb.auth.signOut(),
@@ -232,8 +258,8 @@ document.addEventListener("click", e => { const b = e.target.closest("[data-a]")
 document.addEventListener("input", e => { if (e.target.id === "q") drawFarms(); });
 
 const F = {
-  in: async fd => { ok(await sb.auth.signInWithPassword({ email: fd.get("email").trim(), password: fd.get("password") })); },
-  up: async fd => {
+  in: async fd => { localStorage.setItem("mv_rem", fd.get("rem") ? "1" : "0"); sessionStorage.setItem("mv_alive", "1"); ok(await sb.auth.signInWithPassword({ email: fd.get("email").trim(), password: fd.get("password") })); },
+  up: async fd => { localStorage.setItem("mv_rem", "1"); sessionStorage.setItem("mv_alive", "1");
     const r = ok(await sb.auth.signUp({ email: fd.get("email").trim(), password: fd.get("password"), options: { emailRedirectTo: location.href.split("#")[0], data: { full_name: fd.get("full_name").trim(), phone: fd.get("phone").trim(), county: fd.get("county").trim(), role: fd.get("role") } } }));
     if (!r.session) { authView("in"); toast("Account created. Open the email we sent you, confirm, then log in."); }
   },
@@ -267,10 +293,11 @@ const F = {
     toast("Produce added."); await farmView();
   }
 };
-document.addEventListener("focusout", e => { if (["email", "password"].includes(e.target.name) && e.target.closest("form[data-f=in],form[data-f=up]")) check(e.target); });
+document.addEventListener("focusout", e => { if (["email", "password", "confirm"].includes(e.target.name) && e.target.closest("form[data-f=in],form[data-f=up]")) check(e.target); });
 document.addEventListener("submit", async e => {
   e.preventDefault(); const f = e.target, b = f.querySelector("button:not([type=button])");
-  if (["in", "up"].includes(f.dataset.f) && ![...f.querySelectorAll("[name=email],[name=password]")].map(check).every(Boolean)) return;
+  if (["in", "up"].includes(f.dataset.f) && ![...f.querySelectorAll("[name=email],[name=password],[name=confirm]")].map(check).every(Boolean)) return;
+  if (f.dataset.f === "up" && !f.terms.checked) return toast("Please agree to the Terms and Privacy Policy.");
   const t = b?.textContent; if (b) { b.disabled = true; b.textContent = "Please wait…"; }
   await guard(F[f.dataset.f])(new FormData(f), f);
   if (b && b.isConnected) { b.disabled = false; b.textContent = t; }
@@ -279,6 +306,7 @@ document.addEventListener("submit", async e => {
 // ---- Start-up
 async function start(u) {
   S.u = u; if (!u) return authView("in");
+  if (localStorage.getItem("mv_rem") === "0" && !sessionStorage.getItem("mv_alive")) { await sb.auth.signOut(); return; }
   S.p = ok(await sb.from("profiles").select("*").eq("id", u.id).single());
   if (S.p.role === "farmer") S.farm = ok(await sb.from("farms").select("*").eq("owner_id", u.id).limit(1).maybeSingle());
   shell();
