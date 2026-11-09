@@ -54,7 +54,7 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const ok = r => { if (r.error) throw r.error; return r.data; };
 const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 4000); };
 const guard = f => async (...a) => { try { await f(...a); } catch (x) { toast(x.message || String(x)); } };
-const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: null };
+const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: undefined };
 let M = null, pickCb = null;
 
 // ---- Map: Google Maps if a key is set, otherwise OpenStreetMap via Leaflet
