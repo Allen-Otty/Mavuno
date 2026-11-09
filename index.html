@@ -12,34 +12,46 @@
 <title>Mavuno – Farm to plate, Kenya</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <style>
-:root{--bg:#f4f1ea;--card:#fff;--ink:#1d2a1f;--mut:#667366;--g:#2e7d32;--g2:#e3f1e4;--line:#e0dccf;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;color-scheme:dark}}
+:root{--bg:#f6f8f3;--card:#fff;--ink:#16221a;--mut:#6b7a6e;--g:#3c8c2a;--g2:#e8f3e1;--line:#e3e9dd;--grad:linear-gradient(135deg,#7bb83a,#2f7d1f);color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#111a13;--card:#1a251c;--ink:#e8efe6;--mut:#9fb09f;--g:#7fd16a;--g2:#223a26;--line:#2a3a2d;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding:env(safe-area-inset-top) 0 calc(60px + env(safe-area-inset-bottom))}
-header{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px;background:#05352c;color:#fff}
-header a{color:#fff}header .mut{color:#b9d3c9;font-size:13px}
-section{padding:12px 14px;max-width:760px;margin:auto}
-input,select,textarea{width:100%;padding:11px;margin:5px 0;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
-.btn,button{background:var(--g);color:#fff;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
-button.alt{background:var(--g2);color:var(--g)}button.bad{background:#b3261e}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+i{font-style:normal;color:#d7f27a}
+header{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 12px) 16px 16px;background:var(--grad);color:#fff;border-radius:0 0 24px 24px}
+header b{font-size:22px}header a{color:#fff;font-weight:600}
+section{padding:12px 14px;max-width:760px;margin:auto}h3{margin:16px 0 6px}
+input,select,textarea{width:100%;padding:12px 14px;margin:5px 0;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit}
+input.bad{border-color:#b3261e}.err{display:block;color:#b3261e;font-size:12px}
+.btn,button{background:var(--grad);color:#fff;border:0;border-radius:14px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer}
+button:disabled{opacity:.6}button.alt{background:var(--g2);color:var(--g)}button.bad{background:#b3261e}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;margin:10px 0}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.mut{color:var(--mut)}.small{font-size:13px}.c{text-align:center}
 .tag{display:inline-block;background:var(--g2);color:var(--g);border-radius:99px;padding:1px 9px;font-size:12px;font-weight:700}
-#map{height:42vh;border-radius:14px;margin:8px 0;background:var(--g2)}
+.banner{background:var(--grad);color:#fff;border-radius:20px;padding:18px;margin:10px 0}.banner b{font-size:19px;display:block}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
+.chip{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:99px;white-space:nowrap;padding:8px 14px;font-weight:600}.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;cursor:pointer}
+.pc img,.pc .em{width:100%;height:92px;object-fit:cover;border-radius:12px;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:40px}
+.pp{color:var(--g);font-weight:800;margin-top:4px}.pp span{font-weight:400;color:var(--mut);font-size:12px}
+#map{height:calc(100vh - 200px);min-height:300px;border-radius:18px;background:var(--g2)}
 nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav a{flex:1;text-align:center;padding:14px 4px;color:var(--mut);text-decoration:none;font-weight:600}nav a.on{color:var(--g)}
-.auth{max-width:380px;margin:8vh auto;padding:0 18px}.auth h1{margin:0;color:var(--g)}
+nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;color:var(--mut);text-decoration:none;font-weight:600;font-size:12px}nav a span{font-size:20px}nav a.on{color:var(--g)}
+.hero{background:var(--grad);color:#fff;padding:calc(env(safe-area-inset-top) + 40px) 22px 34px;border-radius:0 0 30px 30px}.hero b{font-size:36px;display:block}
+.auth{max-width:420px;margin:0 auto;padding:18px 20px}.auth h2{margin:6px 0}
+.splash{position:fixed;inset:0;background:var(--grad);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;transition:opacity .5s}.splash.off{opacity:0}.splash b{font-size:46px}
 #sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:9}
 #sheet[hidden],[hidden]{display:none!important}
-#sheet>div{background:var(--bg);width:100%;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:14px;max-width:760px;margin:auto}
-#toast{position:fixed;left:12px;right:12px;bottom:76px;background:#222;color:#fff;padding:12px;border-radius:12px;z-index:20;text-align:center}
+#sheet>div{background:var(--bg);width:100%;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:14px;max-width:760px;margin:auto}
+#toast{position:fixed;left:12px;right:12px;bottom:84px;background:#222;color:#fff;padding:12px;border-radius:14px;z-index:60;text-align:center}
 #pick{background:#fff3cd;color:#664d03;padding:10px 14px;text-align:center;font-weight:600}
-.msgs{max-height:220px;overflow:auto;margin:8px 0}.m{padding:6px 10px;border-radius:12px;margin:3px 0;max-width:80%;background:var(--g2)}.m.me{margin-left:auto;background:var(--g);color:#fff}
-img.ph{width:54px;height:54px;object-fit:cover;border-radius:10px}.pr{display:flex;gap:10px;align-items:center;margin:8px 0}.pr>div{flex:1}.pr input{width:72px}
+.msgs{max-height:220px;overflow:auto;margin:8px 0}.m{padding:6px 10px;border-radius:14px;margin:3px 0;max-width:80%;background:var(--g2)}.m.me{margin-left:auto;background:var(--g);color:#fff}
+img.ph{width:54px;height:54px;object-fit:cover;border-radius:12px}.pr{display:flex;gap:10px;align-items:center;margin:8px 0}.pr>div{flex:1}.pr input{width:72px}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="toast" hidden></div>
+<div class="splash" id="splash"><b>Mavuno<i>.</i></b><span>Fresh from the farm, straight to you</span></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
@@ -53,8 +65,11 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const ok = r => { if (r.error) throw r.error; return r.data; };
 const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 4000); };
-const guard = f => async (...a) => { try { await f(...a); } catch (x) { toast(x.message || String(x)); } };
-const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: undefined };
+const nice = m => /invalid login/i.test(m) ? "Wrong email or password." : /not confirmed/i.test(m) ? "Please confirm your email first. Check your inbox and spam." : m;
+const guard = f => async (...a) => { try { await f(...a); } catch (x) { toast(nice(x.message || String(x))); } };
+const hideSplash = () => setTimeout(() => { const s = $("#splash"); if (s) { s.classList.add("off"); setTimeout(() => s.remove(), 500); } }, Math.max(0, 900 - (Date.now() - S.t0)));
+function check(el) { const v = el.value, m = el.name === "email" && !/^\S+@\S+\.\S+$/.test(v.trim()) ? "That email doesn't look right." : el.name === "password" && v.length < 6 ? "Use 6 or more characters." : ""; const s = el.nextElementSibling; if (s && s.classList.contains("err")) s.textContent = m; el.classList.toggle("bad", !!m); return !m; }
+const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: undefined, t0: Date.now(), cat: "All" };
 let M = null, pickCb = null;
 
 // ---- Map: Google Maps if a key is set, otherwise OpenStreetMap via Leaflet
@@ -77,48 +92,57 @@ async function initMap() {
 // ---- Auth screens
 function authView(mode = "in") {
   const up = mode === "up";
-  $("#app").innerHTML = `<div class="auth"><h1>Mavuno</h1><p class="mut">Farm to plate, Kenya</p>
-  <form data-f="${mode}">
+  $("#app").innerHTML = `<div class="hero"><b>Mavuno<i>.</i></b><span>Fresh from the farm, straight to you</span></div><div class="auth"><h2>${up ? "Create account" : "Welcome back"}</h2>
+  <form data-f="${mode}" novalidate>
   ${up ? `<input name="full_name" placeholder="Full name" required><input name="phone" placeholder="Phone (07…)" inputmode="tel" required><input name="county" placeholder="County" required>
   <select name="role"><option value="buyer">I want to buy</option><option value="farmer">I am a farmer</option></select>` : ""}
-  <input name="email" type="email" placeholder="Email" required autocomplete="email">
-  <input name="password" type="password" placeholder="Password (6+ characters)" minlength="6" required autocomplete="${up ? "new-password" : "current-password"}">
-  <button class="btn" style="width:100%">${up ? "Create account" : "Log in"}</button></form>
-  <p class="mut c">${up ? `Have an account? <a href="#" data-a="auth" data-m="in">Log in</a>` : `New here? <a href="#" data-a="auth" data-m="up">Create account</a> · <a href="#" data-a="reset">Forgot password</a>`}</p>
+  <input name="email" type="email" placeholder="Email" required autocomplete="email"><small class="err"></small>
+  <input name="password" type="password" placeholder="Password (6+ characters)" required autocomplete="${up ? "new-password" : "current-password"}"><small class="err"></small>
+  <button class="btn" style="width:100%;margin-top:8px">${up ? "Create account" : "Log in"}</button></form>
+  <p class="mut c">${up ? `Have an account? <a href="#" data-a="auth" data-m="in">Log in</a>` : `New here? <a href="#" data-a="auth" data-m="up">Sign up</a> · <a href="#" data-a="reset">Forgot password?</a>`}</p>
   ${up ? `<p class="mut c small">No email address? Make a free Gmail account first, then sign up here.</p>` : ""}</div>`;
+  hideSplash();
 }
 
 // ---- App shell
 function shell() {
-  const fm = S.p.role === "farmer";
-  $("#app").innerHTML = `<header><b>Mavuno</b><span class="mut">${esc(S.p.full_name)} · ${esc(S.p.role)}</span><a href="#" data-a="out">Log out</a></header>
+  const fm = S.p.role === "farmer", n = (v, i, t) => `<a href="#" data-a="nav" data-v="${v}"><span>${i}</span>${t}</a>`;
+  $("#app").innerHTML = `<header><div><b>Mavuno<i>.</i></b><div class="small">Hi ${esc((S.p.full_name || "").split(" ")[0])} · ${esc(S.p.county || "Kenya")}</div></div><a href="#" data-a="out">Log out</a></header>
   <div id="pick" hidden></div>
-  <section id="v-map"><input id="q" placeholder="Search produce, farm or county"><div id="map"></div><div id="list"></div></section>
+  <section id="v-home"><input id="q" placeholder="Search produce, farm or county">
+  <div class="banner"><b>Fresh from local farms</b>Order straight from the farmer. Pay on delivery.</div>
+  <div class="chips" id="chips"></div><h3>Fresh produce</h3><div class="grid" id="grid"></div><h3>Farms near you</h3><div id="list"></div></section>
+  <section id="v-map" hidden><div id="map"></div></section>
   <section id="v-orders" hidden></section><section id="v-farm" hidden></section>
-  <nav><a href="#" data-a="nav" data-v="map">Map</a><a href="#" data-a="nav" data-v="orders">Orders</a>${fm ? `<a href="#" data-a="nav" data-v="farm">My farm</a>` : ""}</nav><div id="sheet" hidden></div>`;
-  show("map"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message));
+  <nav>${n("home", "🏠", "Home")}${n("map", "📍", "Map")}${n("orders", "🧾", "Orders")}${fm ? n("farm", "🌱", "My farm") : ""}</nav><div id="sheet" hidden></div>`;
+  show("home"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message)); hideSplash();
 }
 function show(v) {
   S.v = v; stopChat();
-  ["map", "orders", "farm"].forEach(k => { const e = $("#v-" + k); if (e) e.hidden = k !== v; });
+  ["home", "map", "orders", "farm"].forEach(k => { const e = $("#v-" + k); if (e) e.hidden = k !== v; });
   document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
   if (v === "map" && M) M.fix();
 }
-const nav = guard(async v => { show(v); if (v === "map") await loadFarms(); if (v === "orders") await loadOrders(); if (v === "farm") await farmView(); });
+const nav = guard(async v => { show(v); if (v === "map" || v === "home") await loadFarms(); if (v === "orders") await loadOrders(); if (v === "farm") await farmView(); });
 
 // ---- Farms on the map
 async function loadFarms() {
   S.farms = ok(await sb.from("farms").select("id,owner_id,name,description,county,ward,public_lat,public_lng,verified,products(id,name,category,price,unit,quantity_available,photo_url,active)"));
   drawFarms();
 }
+const EM = { Vegetables: "🥬", Fruits: "🍎", Grains: "🌾", Dairy: "🥛", "Eggs and poultry": "🥚", Meat: "🥩", Other: "🧺" };
 function drawFarms() {
-  const q = ($("#q")?.value || "").toLowerCase().trim();
-  const fs = S.farms.filter(f => !q || [f.name, f.county, f.ward, ...(f.products || []).map(p => p.name)].join(" ").toLowerCase().includes(q));
+  const q = ($("#q")?.value || "").toLowerCase().trim(), cat = S.cat;
+  $("#chips").innerHTML = ["All", ...Object.keys(EM)].map(c => `<button class="chip ${c === cat ? "on" : ""}" data-a="cat" data-c="${esc(c)}">${EM[c] || "✨"} ${esc(c)}</button>`).join("");
+  const hit = (p, f) => p.active && (cat === "All" || p.category === cat) && (!q || [p.name, f.name, f.county, f.ward].join(" ").toLowerCase().includes(q));
+  const fs = S.farms.filter(f => (f.products || []).some(p => hit(p, f)) || (cat === "All" && (!q || [f.name, f.county, f.ward].join(" ").toLowerCase().includes(q))));
   if (M) { M.clear(); fs.forEach(f => f.public_lat != null && M.add(f.public_lat, f.public_lng, f.name, () => openFarm(f.id))); }
-  $("#list").innerHTML = fs.length ? fs.map(f => `<div class="card" data-a="farm" data-id="${f.id}" style="cursor:pointer"><b>${esc(f.name)}</b> ${f.verified ? `<span class="tag">Verified</span>` : ""}
-    <div class="mut small">${esc([f.ward, f.county].filter(Boolean).join(", "))}</div>
-    <div class="small">${(f.products || []).filter(p => p.active).slice(0, 4).map(p => esc(p.name)).join(" · ") || "No produce listed yet"}</div></div>`).join("")
-    : `<p class="mut c">${S.farms.length ? "No farms match your search." : "No farms yet. Farmers: create an account and add your farm."}</p>`;
+  const pr = fs.flatMap(f => (f.products || []).filter(p => hit(p, f)).map(p => ({ p, f })));
+  $("#grid").innerHTML = pr.length ? pr.map(({ p, f }) => `<div class="pc" data-a="farm" data-id="${f.id}">${p.photo_url ? `<img loading="lazy" src="${esc(p.photo_url)}" alt="">` : `<div class="em">${EM[p.category] || "🧺"}</div>`}
+    <b>${esc(p.name)}</b><div class="small mut">${esc(f.name)}${f.county ? " · " + esc(f.county) : ""}</div><div class="pp">KES ${esc(p.price)}<span> / ${esc(p.unit)}</span></div></div>`).join("")
+    : `<p class="mut">${S.farms.length ? "Nothing matches your search." : "No produce yet. Farmers: create an account and add your farm."}</p>`;
+  $("#list").innerHTML = fs.map(f => `<div class="card" data-a="farm" data-id="${f.id}" style="cursor:pointer"><b>${esc(f.name)}</b> ${f.verified ? `<span class="tag">Verified</span>` : ""}
+    <div class="mut small">${esc([f.ward, f.county].filter(Boolean).join(", "))}</div></div>`).join("");
 }
 const openFarm = guard(async id => {
   const f = S.farms.find(x => x.id === id); if (!f) return;
@@ -191,6 +215,7 @@ const farmView = guard(async () => {
 // ---- Click and submit handlers
 const A = {
   auth: d => authView(d.m),
+  cat: d => { S.cat = d.c; drawFarms(); },
   reset: guard(async () => { const e = prompt("Your account email"); if (!e) return; ok(await sb.auth.resetPasswordForEmail(e, { redirectTo: location.href.split("#")[0] })); toast("Check your email for the reset link."); }),
   out: () => sb.auth.signOut(),
   nav: d => nav(d.v),
@@ -242,7 +267,14 @@ const F = {
     toast("Produce added."); await farmView();
   }
 };
-document.addEventListener("submit", e => { e.preventDefault(); const f = e.target; guard(F[f.dataset.f])(new FormData(f), f); });
+document.addEventListener("focusout", e => { if (["email", "password"].includes(e.target.name) && e.target.closest("form[data-f=in],form[data-f=up]")) check(e.target); });
+document.addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target, b = f.querySelector("button:not([type=button])");
+  if (["in", "up"].includes(f.dataset.f) && ![...f.querySelectorAll("[name=email],[name=password]")].map(check).every(Boolean)) return;
+  const t = b?.textContent; if (b) { b.disabled = true; b.textContent = "Please wait…"; }
+  await guard(F[f.dataset.f])(new FormData(f), f);
+  if (b && b.isConnected) { b.disabled = false; b.textContent = t; }
+});
 
 // ---- Start-up
 async function start(u) {

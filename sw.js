@@ -1,5 +1,5 @@
 // Mavuno service worker. Bump V whenever index.html changes so phones pick up the new version.
-const V = "mavuno-v4";
+const V = "mavuno-v5";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
