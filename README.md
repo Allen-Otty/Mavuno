@@ -51,3 +51,9 @@ Demo built and shared. The real app is not built yet: next step is connecting th
 ## Updating the demo link
 
 Upload a new `index.html` to the repo root (Add file → Upload files → Commit). GitHub Pages refreshes in about a minute.
+
+## Real app vs demo
+- `index.html` is the real app: email + password accounts, farms on a map, produce listings with photos, order requests and chat, all stored in Supabase.
+- `demo.html` is the earlier clickable demo with sample data.
+- Maps: set `GMAPS_KEY` near the top of `index.html` to use Google Maps (restrict the key to your site address in Google Cloud). While it is empty the app uses free OpenStreetMap.
+- Database changes live in `supabase/migrations/`. Migrations 003 and 004 are already applied to the Supabase project.

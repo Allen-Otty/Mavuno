@@ -1,5 +1,5 @@
 // Mavuno service worker. Bump V whenever index.html changes so phones pick up the new version.
-const V = "mavuno-v1";
+const V = "mavuno-v2";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -16,7 +16,7 @@ self.addEventListener("fetch", e => {
       .catch(() => caches.match("index.html")));
     return;
   }
-  if (u.origin === location.origin || u.hostname.endsWith("gstatic.com") || u.hostname.endsWith("googleapis.com")) {
+  if (u.origin === location.origin) {
     e.respondWith(caches.match(r).then(h => h || fetch(r).then(res => { const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); return res; })));
   }
 });

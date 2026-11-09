@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,395 +7,256 @@
 <meta name="theme-color" content="#05352c">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Mavuno">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <title>Mavuno – Farm to plate, Kenya</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <style>
-:root{--bg:#f4f1ea;--card:#fff;--ink:#1d2a1f;--mut:#667366;--g:#2e7d32;--g2:#e3f1e4;--line:#e0dccf;--land:#dfeccf;--land2:#cfe3bb;--water:#bcdcea;--road:#fff;--warn:#b26a00;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;--land:#26382a;--land2:#2c4230;--water:#1f3b48;--road:#3a4a3d;--warn:#e0a040;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;--land:#26382a;--land2:#2c4230;--water:#1f3b48;--road:#3a4a3d;--warn:#e0a040;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{--bg:#f4f1ea;--card:#fff;--ink:#1d2a1f;--mut:#667366;--g:#2e7d32;--g2:#e3f1e4;--line:#e0dccf;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#121a14;--card:#1b261e;--ink:#e8efe6;--mut:#9fb09f;--g:#6fcf76;--g2:#233a27;--line:#2b3a2e;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg)}
-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
-.logo{font-weight:800;font-size:22px;letter-spacing:-.5px;color:var(--g)}
-.logo span{color:var(--ink);font-weight:500;font-size:12px;display:block;letter-spacing:0;color:var(--mut)}
-.loc{font-size:12px;background:var(--g2);color:var(--g);padding:6px 10px;border-radius:99px;font-weight:600}
-.demo{margin:0 16px 8px;padding:8px 12px;border:1px dashed var(--warn);color:var(--warn);border-radius:10px;font-size:12px}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 10px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;font-size:14px;cursor:pointer}
-.chip.on{background:var(--g);border-color:var(--g);color:#fff;font-weight:600}
-.map{margin:0 16px;border-radius:18px;overflow:hidden;border:1px solid var(--line);position:relative}
-.map svg{display:block;width:100%;height:auto}
-.pin{cursor:pointer}
-.pin .dot{fill:var(--g);stroke:#fff;stroke-width:2.5}
-.pin.sel .dot{fill:#c62828}
-.pin .zone{fill:var(--g);opacity:.16}
-.note{position:absolute;left:8px;bottom:6px;font-size:10px;color:var(--mut);background:var(--card);padding:2px 6px;border-radius:6px;opacity:.9}
-.panel{padding:14px 16px 40px}
-h2{font-size:17px;margin:18px 0 8px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.name{font-weight:700;font-size:17px}
-.sub{color:var(--mut);font-size:13px}
-.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;margin-right:4px}
-.ver{background:var(--g2);color:var(--g)}
-.unv{background:transparent;color:var(--mut);border:1px solid var(--line)}
-.prac{font-size:13px;margin:8px 0;padding:8px 10px;border-radius:10px;background:var(--g2)}
-.prac b{color:var(--g)}
-.item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
-.price{font-weight:700}
-.qty{display:flex;align-items:center;gap:8px}
-.qty button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
-.btn{width:100%;margin-top:10px;padding:13px;border:0;border-radius:12px;background:var(--g);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
-.btn:disabled{opacity:.45;cursor:default}
-.ok{background:var(--g2);border:1px solid var(--g);border-radius:16px;padding:14px}
-.ok li{margin:4px 0}
-.steps{display:grid;gap:8px}
-.step{display:flex;gap:10px;align-items:flex-start}
-.step i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--g);color:#fff;font-style:normal;font-weight:700;display:grid;place-items:center;font-size:13px}
-.road{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.road div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:13px}
-.road b{display:block;color:var(--g);font-size:12px;margin-bottom:2px}
-.link{background:none;border:0;color:var(--g);cursor:pointer;font-size:13px;padding:0;text-decoration:underline}
-footer{text-align:center;color:var(--mut);font-size:12px;padding:8px 16px 24px}
-.tabs{display:flex;gap:6px;padding:4px 16px 10px}.tab{flex:1;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
-#acct .tabs{padding:0 0 10px}
-.btn2{width:100%;margin-top:10px;padding:11px;border:1px solid var(--g);border-radius:12px;background:transparent;color:var(--g);font-size:15px;font-weight:700;cursor:pointer}
-.fld{display:block;margin-top:10px;font-size:13px;color:var(--mut)}.fld input,.fld select,.addp input,.addp select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:15px}
-.addp{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.addp input,.addp select{margin:0}
-.row2{display:flex;gap:8px;flex-wrap:wrap}.row2 button{flex:1;margin-top:10px}.chk{font-size:13px;color:var(--mut);margin-top:8px}
-[hidden]{display:none!important}
-.ph{width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:8px}.th{width:52px;height:52px;object-fit:cover;border-radius:10px;margin-right:10px;flex:none}
-.fld input[type=file]{padding:8px}
-:root[data-theme="light"]{--bg:#fff;--card:#f2faf1;--ink:#26382a;--mut:#6f8173;--g:#43a047;--g2:#dff3df;--line:#e6efe4;--land:#e8f6df;--land2:#d8efc9;--water:#cde9f6;--road:#fff;--warn:#b26a00;--cl:10px 10px 22px rgba(80,120,80,.16),-6px -6px 16px rgba(255,255,255,.95),inset 3px 3px 8px rgba(255,255,255,.95),inset -5px -5px 12px rgba(80,130,80,.10);--cp:6px 6px 14px rgba(80,120,80,.16),-4px -4px 10px #fff,inset 2px 2px 5px #fff,inset -3px -3px 7px rgba(80,130,80,.12);--cg:8px 8px 18px rgba(58,154,67,.35),inset 3px 3px 8px rgba(255,255,255,.45),inset -5px -5px 10px rgba(0,80,0,.25);--ci:inset 4px 4px 9px rgba(80,120,80,.16),inset -3px -3px 8px rgba(255,255,255,.95);--gr:linear-gradient(145deg,#5cc062,#3a9a43)}
-body{font-family:"Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff}
-.app{background:#fff}
-.card,.ok,.road div{border:0;border-radius:26px;box-shadow:var(--cl);margin-bottom:16px}
-.card{background:var(--card)}
-.map{border:0;border-radius:30px;box-shadow:var(--cl);background:#fff}
-.chips{padding:8px 16px 20px}
-.tabs{padding:6px 16px 18px}
-#acct .tabs{padding:4px 0 18px}
-.chip,.tab,.loc{border:0;border-radius:22px;background:var(--card);box-shadow:var(--cp);font-family:inherit;font-weight:700}
-.chip{padding:10px 16px}
-.chip.on,.tab.on{background:var(--gr);color:#fff;box-shadow:var(--cg)}
-.btn{border-radius:22px;background:var(--gr);box-shadow:var(--cg);font-family:inherit;padding:14px}
-.btn2{border:0;border-radius:20px;background:linear-gradient(145deg,#fff,#e4f3e2);color:var(--g);box-shadow:var(--cp);font-family:inherit}
-.btn:active,.btn2:active,.chip:active,.tab:active{transform:scale(.97)}
-.btn:disabled{box-shadow:var(--cp);background:#e5ece3;color:#9aa89c}
-.fld input,.fld select,.addp input,.addp select{border:0;border-radius:16px;background:#fff;box-shadow:var(--ci);font-family:inherit}
-.badge{box-shadow:var(--cp);border:0}
-.ver{background:#e3f5e3}
-.unv{background:#fff3e0;color:#b26a00;border:0}
-.demo{border:0;border-radius:20px;background:#fff4e0;box-shadow:var(--cp)}
-.prac{border-radius:18px;background:#fff;box-shadow:var(--ci)}
-.qty button{border:0;background:linear-gradient(145deg,#fff,#e4f3e2);box-shadow:var(--cp);font-weight:800;color:var(--ink)}
-.th,.ph{border-radius:18px;box-shadow:4px 4px 10px rgba(80,120,80,.2)}
-.pin .dot{filter:drop-shadow(2px 4px 3px rgba(0,0,0,.28))}
-.item{border-top-color:#e8f0e6}
-:root[data-theme="light"]{--card:#e6f6e2;--cl:12px 14px 26px rgba(60,110,60,.28),-8px -8px 18px #fff,inset 7px 7px 14px rgba(255,255,255,.95),inset -9px -9px 18px rgba(60,140,70,.22);--cp:7px 8px 16px rgba(60,110,60,.26),-5px -5px 12px #fff,inset 4px 4px 8px rgba(255,255,255,.95),inset -5px -5px 10px rgba(60,140,70,.20);--cg:9px 10px 20px rgba(40,140,60,.45),inset 5px 5px 10px rgba(255,255,255,.55),inset -7px -7px 12px rgba(0,90,20,.38);--ci:inset 6px 6px 12px rgba(60,110,60,.26),inset -5px -5px 10px #fff}
-.card{border-radius:32px;padding:18px}
-.card:nth-of-type(3n+2){background:#fff0e3}
-.card:nth-of-type(3n){background:#ebe8fb}
-.map{border-radius:36px}
-.btn{padding:16px;font-size:16px}
-.item{border-top:0;border-bottom:2px dotted rgba(60,110,60,.18)}
-.app{max-width:none;margin:0;display:grid;grid-template-columns:1fr}
-.main{min-width:0;width:100%;max-width:1180px;margin:0 auto}
-header.top{display:flex;align-items:center;gap:12px;padding:14px 16px 8px}
-.burger{border:0;background:var(--card);box-shadow:var(--cp);border-radius:14px;width:42px;height:42px;font-size:18px;cursor:pointer}
-.crumb{font-weight:700;color:var(--mut);font-size:14px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gsearch{display:none;flex:1;max-width:420px;border:0;border-radius:16px;padding:12px 16px;background:#fff;box-shadow:var(--ci);font:inherit}
-.bell{position:relative;font-size:20px}.bell i{position:absolute;top:0;right:-2px;width:9px;height:9px;border-radius:50%;background:#e53935}
-.av{width:38px;height:38px;border-radius:50%;background:#05352c;color:#c6f432;display:grid;place-items:center;font-weight:800;flex:none}
-.pre .crumb,.pre .gsearch,.pre .bell,.pre .av,.pre .loc,.pre .burger{display:none!important}
-.sb{position:fixed;left:0;top:0;bottom:0;width:272px;background:#05352c;color:#cfe6dc;padding:16px 14px;display:flex;flex-direction:column;gap:4px;z-index:60;transform:translateX(-102%);transition:transform .25s;overflow:auto}
-.sb.open{transform:none;box-shadow:12px 0 30px rgba(0,0,0,.3)}
-.sbl{display:flex;gap:10px;align-items:center;font-weight:800;font-size:20px;color:#fff;padding:6px 8px 16px}.sbl b{width:40px;height:40px;border-radius:12px;background:#c6f432;display:grid;place-items:center;font-size:20px}.sbl small{display:block;font-size:11px;font-weight:500;color:#9cc3b4}
-.sbh{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7fae9d;padding:14px 10px 4px}
-.si{display:flex;gap:12px;align-items:center;width:100%;border:0;background:transparent;color:#cfe6dc;font:inherit;font-weight:600;padding:12px 14px;border-radius:14px;cursor:pointer;text-align:left}
-.si:hover{background:#0a4437}.si.on{background:#0d5a47;color:#c6f432}
-.sbu{margin-top:auto;display:flex;gap:10px;align-items:center;padding:12px;border-top:1px solid #0d4a3c;color:#fff;font-weight:700;font-size:14px}.sbu small{display:block;font-weight:500;color:#9cc3b4;font-size:12px}.sbu i{width:38px;height:38px;border-radius:50%;background:#c6f432;color:#05352c;display:grid;place-items:center;font-style:normal;font-weight:800;flex:none}.sbu button{margin-left:auto;background:transparent;border:0;color:#cfe6dc;font-size:20px;cursor:pointer}
-.seg{display:flex;gap:8px;padding:0 16px 4px}
-.feed{display:none}
-.feedv .feed{display:block;height:min(74vh,660px);overflow-y:auto;scroll-snap-type:y mandatory;border-radius:36px;box-shadow:var(--cl);margin:0 16px 24px}
-.feedv .map,.feedv #panel{display:none}
-.reel{height:100%;scroll-snap-align:start;position:relative;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
-.rbig{position:absolute;inset:0 0 25% 0;display:grid;place-items:center;font-size:130px}
-.rail{position:absolute;right:12px;bottom:110px;display:flex;flex-direction:column;gap:14px}
-.rail button{width:56px;padding:10px 0;border-radius:28px;border:0;background:rgba(255,255,255,.92);box-shadow:var(--cp);font-size:22px;line-height:1.1;cursor:pointer;color:#26382a}
-.rail small{display:block;font-size:10px;font-weight:800}.rail .liked{color:#e53935}
-.rcap{position:relative;background:linear-gradient(transparent,rgba(0,0,0,.55));padding:70px 84px 22px 20px;color:#fff}
-.rcap b{font-size:18px}.rp{font-size:17px;font-weight:800;margin-top:4px}.rs{font-size:13px;opacity:.9;margin-top:2px}
-@media (max-width:899px){.crumb,.loc,.bell{display:none}header.top .logo{flex:1}}
-@media (min-width:900px){
- .app{grid-template-columns:272px 1fr}.app.noside{grid-template-columns:1fr}
- .sb{position:sticky;transform:none;height:100vh;box-shadow:none}
- .burger,header.top .logo,#mt{display:none}.gsearch{display:block}
- header.top{padding:18px 28px 10px}
- #explore{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0 22px;padding:0 28px;align-items:start}
- #explore .chips,#explore .seg,#explore .feed{grid-column:1/-1}
- #explore .chips,#explore .seg{padding-left:0;padding-right:0}
- .map{margin:0}#panel{padding:0 0 40px}
- .feedv .feed{margin:0 auto 24px;max-width:430px;width:100%}
- #acct{padding:0 28px 40px;max-width:900px}
- #acct .tabs:has(.tab[data-a="pg"]){display:none}
- .demo{margin:0 28px 8px}
-}
-@media (max-width:899px){.feedv .feed{height:calc(100svh - 330px);min-height:380px}}
-#inst{padding:8px 12px;font-size:13px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding:env(safe-area-inset-top) 0 calc(60px + env(safe-area-inset-bottom))}
+header{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px;background:#05352c;color:#fff}
+header a{color:#fff}header .mut{color:#b9d3c9;font-size:13px}
+section{padding:12px 14px;max-width:760px;margin:auto}
+input,select,textarea{width:100%;padding:11px;margin:5px 0;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+.btn,button{background:var(--g);color:#fff;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
+button.alt{background:var(--g2);color:var(--g)}button.bad{background:#b3261e}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.mut{color:var(--mut)}.small{font-size:13px}.c{text-align:center}
+.tag{display:inline-block;background:var(--g2);color:var(--g);border-radius:99px;padding:1px 9px;font-size:12px;font-weight:700}
+#map{height:42vh;border-radius:14px;margin:8px 0;background:var(--g2)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;padding:14px 4px;color:var(--mut);text-decoration:none;font-weight:600}nav a.on{color:var(--g)}
+.auth{max-width:380px;margin:8vh auto;padding:0 18px}.auth h1{margin:0;color:var(--g)}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:9}
+#sheet[hidden],[hidden]{display:none!important}
+#sheet>div{background:var(--bg);width:100%;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:14px;max-width:760px;margin:auto}
+#toast{position:fixed;left:12px;right:12px;bottom:76px;background:#222;color:#fff;padding:12px;border-radius:12px;z-index:20;text-align:center}
+#pick{background:#fff3cd;color:#664d03;padding:10px 14px;text-align:center;font-weight:600}
+.msgs{max-height:220px;overflow:auto;margin:8px 0}.m{padding:6px 10px;border-radius:12px;margin:3px 0;max-width:80%;background:var(--g2)}.m.me{margin-left:auto;background:var(--g);color:#fff}
+img.ph{width:54px;height:54px;object-fit:cover;border-radius:10px}.pr{display:flex;gap:10px;align-items:center;margin:8px 0}.pr>div{flex:1}.pr input{width:72px}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
 </head>
 <body>
-<div class="app"><aside class="sb" id="sb" hidden></aside><main class="main">
-<header class="top"><button class="burger" id="burger" aria-label="Menu">☰</button><div class="crumb" id="crumb">Welcome</div><input class="gsearch" placeholder="Search farms, produce..." aria-label="Search">
-  <div class="logo">🌾 Mavuno<span>Farm to plate, no middlemen</span></div>
-  <div class="loc">📍 Kenya · Vihiga</div>
-<button class="chip" id="inst" hidden>⬇ Install app</button><span class="bell">🔔<i></i></span><span class="av" id="av">D</span></header>
-<div class="demo">Demo preview with sample data. Farms, prices and ratings shown here are examples, not real listings.</div>
-<div class="tabs" id="mt" hidden><button class="tab on" data-t="explore">🗺️ Explore</button><button class="tab" data-t="acct">👤 Account</button></div>
-<div class="panel" id="acct" hidden></div>
-<div id="explore">
-<div class="seg" id="seg"><button class="chip on" data-v="map">🗺️ Map</button><button class="chip" data-v="feed">🎞️ Feed</button></div>
-<div class="chips" id="chips"></div>
-<div class="map">
-<svg viewBox="0 0 400 300" id="map" role="img" aria-label="Illustrated map of farms near Luanda">
-  <rect width="400" height="300" fill="var(--land)"/>
-  <path d="M0 210 C80 180 120 240 200 215 S330 160 400 190 V300 H0Z" fill="var(--land2)"/>
-  <path d="M-10 90 C60 110 110 60 190 85 S320 140 410 100" stroke="var(--water)" stroke-width="12" fill="none" stroke-linecap="round"/>
-  <path d="M40 0 C70 90 130 150 190 300" stroke="var(--road)" stroke-width="5" fill="none"/>
-  <path d="M0 160 C100 150 250 170 400 140" stroke="var(--road)" stroke-width="4" fill="none"/>
-  <path d="M290 0 C270 80 300 200 330 300" stroke="var(--road)" stroke-width="3" fill="none"/>
-  <g font-size="11" fill="var(--mut)" font-weight="600"><text x="168" y="168">Luanda</text><text x="60" y="48">Kima</text><text x="300" y="52">Chavakali</text><text x="230" y="262">Mbale</text></g>
-  <g id="pins"></g>
-</svg>
-<div class="note">Illustrated map · live version uses OpenStreetMap</div>
-</div>
-<div class="panel" id="panel"></div>
-<div class="feed" id="feed"></div>
-</div>
-<footer>Mavuno · Kenya pilot · Built to connect farmers and households directly</footer>
-</main></div>
+<div id="app"></div><div id="toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
-const CATS=[["all","All","🌾"],["beef","Beef","🥩"],["chicken","Chicken","🍗"],["eggs","Eggs","🥚"],["vegetables","Vegetables","🥬"],["milk","Milk","🥛"]];
-const EMO=Object.fromEntries(CATS.map(c=>[c[0],c[2]]));
-const FARMS=[
-{id:1,n:"Amani Greens",o:"Grace A.",a:"Luanda Township",x:178,y:150,v:0,r:"4.8 (14)",p:"Compost and manure only. No synthetic pesticides.",it:[["vegetables","Kales (sukuma)",40,"bunch"],["vegetables","Tomatoes",120,"kg"],["vegetables","Spinach",30,"bunch"]]},
-{id:2,n:"Kilima Poultry",o:"Peter M.",a:"Kima",x:78,y:70,v:1,r:"4.6 (9)",p:"Commercial feed. Vaccinated flock. No hormones.",it:[["chicken","Kienyeji chicken",900,"bird"],["eggs","Eggs (tray of 30)",420,"tray"]]},
-{id:3,n:"Mwangaza Dairy",o:"Esther K.",a:"Chavakali",x:310,y:78,v:0,r:"4.4 (6)",p:"Zero-grazing, 6 cows. Milk cooled same day.",it:[["milk","Fresh milk",70,"litre"],["beef","Beef (fresh cut)",650,"kg"]]},
-{id:4,n:"Shamba Fresh",o:"John O.",a:"Luanda North",x:215,y:118,v:0,r:"4.2 (5)",p:"Uses DAP fertilizer. Spraying only when needed.",it:[["vegetables","Cabbage",60,"head"],["vegetables","Onions",110,"kg"],["eggs","Eggs (tray of 30)",440,"tray"]]},
-{id:5,n:"Baraka Beef Ranch",o:"Samuel W.",a:"Mbale",x:240,y:230,v:1,r:"4.7 (11)",p:"Free-range grazing. No growth hormones.",it:[["beef","Beef (fresh cut)",620,"kg"],["milk","Fresh milk",65,"litre"]]},
-{id:6,n:"Neema Farm",o:"Lucy N.",a:"Luanda South",x:130,y:200,v:0,r:"New",p:"Organic manure. Mixed vegetables and chickens.",it:[["chicken","Kienyeji chicken",950,"bird"],["vegetables","Sweet potatoes",80,"kg"]]}
-];
-let cat="all",sel=null,cart={},done={};
-const $=s=>document.querySelector(s);
-const chipsEl=$("#chips"),pinsEl=$("#pins"),panel=$("#panel");
-function chips(){chipsEl.innerHTML=CATS.map(c=>`<button class="chip ${c[0]===cat?"on":""}" data-c="${c[0]}">${c[2]} ${c[1]}</button>`).join("")}
-function vis(){return FARMS.filter(f=>cat==="all"||f.it.some(i=>i[0]===cat))}
-function pins(){
-  pinsEl.innerHTML=vis().map(f=>{
-    const e=EMO[cat==="all"?f.it[0][0]:cat];
-    const ex=done[f.id]?`<circle cx="9" cy="-6" r="4" fill="#c62828" stroke="#fff" stroke-width="1.5"/>`:"";
-    return `<g class="pin ${sel===f.id?"sel":""}" data-id="${f.id}" transform="translate(${f.x} ${f.y})"><circle class="zone" r="24"/><circle class="dot" r="13"/><text y="5" font-size="13" text-anchor="middle">${e}</text>${ex}</g>`}).join("");
+// ---- Config: the Supabase key below is a public (publishable) key; row-level security protects the data.
+const SB_URL = "https://ukkwimgzbyjwnqknuxwe.supabase.co", SB_KEY = "sb_publishable_73UzjLEo5224KMqycG6-Xg_G3i854Vc";
+// Paste a Google Maps JavaScript API key here (restrict it to your site address in Google Cloud). Empty = free OpenStreetMap fallback.
+const GMAPS_KEY = "";
+
+const sb = supabase.createClient(SB_URL, SB_KEY);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ok = r => { if (r.error) throw r.error; return r.data; };
+const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 4000); };
+const guard = f => async (...a) => { try { await f(...a); } catch (x) { toast(x.message || String(x)); } };
+const S = { u: null, p: null, farm: null, farms: [], v: "map", timer: null, uid: null };
+let M = null, pickCb = null;
+
+// ---- Map: Google Maps if a key is set, otherwise OpenStreetMap via Leaflet
+const loadScript = src => new Promise((r, j) => { const s = document.createElement("script"); s.src = src; s.onload = r; s.onerror = j; document.head.appendChild(s); });
+async function initMap() {
+  const el = $("#map"), c = { lat: 0.2, lng: 37.9 };
+  if (GMAPS_KEY) {
+    await loadScript("https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(GMAPS_KEY));
+    const g = new google.maps.Map(el, { center: c, zoom: 6, streetViewControl: false, mapTypeControl: false }); let mk = [];
+    g.addListener("click", e => pickCb && pickCb(e.latLng.lat(), e.latLng.lng()));
+    M = { clear() { mk.forEach(m => m.setMap(null)); mk = []; }, add(lat, lng, t, fn) { const m = new google.maps.Marker({ position: { lat, lng }, map: g, title: t }); m.addListener("click", fn); mk.push(m); }, go(lat, lng, z) { g.setCenter({ lat, lng }); g.setZoom(z); }, fix() { google.maps.event.trigger(g, "resize"); } };
+  } else {
+    const m = L.map(el).setView([c.lat, c.lng], 6), grp = L.layerGroup().addTo(m);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(m);
+    m.on("click", e => pickCb && pickCb(e.latlng.lat, e.latlng.lng));
+    M = { clear() { grp.clearLayers(); }, add(lat, lng, t, fn) { L.marker([lat, lng], { title: t }).on("click", fn).addTo(grp); }, go(lat, lng, z) { m.setView([lat, lng], z); }, fix() { m.invalidateSize(); } };
+  }
 }
-function home(){
-  const list=vis();
-  panel.innerHTML=`<h2>${list.length} farm${list.length===1?"":"s"} near Luanda</h2>`+
-  list.map(f=>`<div class="card" data-open="${f.id}" style="cursor:pointer"><div class="row"><div><div class="name">${f.n}</div><div class="sub">${f.a} · ★ ${f.r}</div></div><span class="badge ${f.v?"ver":"unv"}">${f.v?"✔ Verified":"Not yet verified"}</span></div></div>`).join("")+
-  `<h2>One platform, no middlemen</h2><div class="card sub">Farmers, FPOs, households and food vendors, bulk buyers like supermarkets and distributors, county agricultural officers, CBFs and partner organizations, all in one place. Buyers deal directly with the farm or FPO, so more of the price stays with the farmer.</div><h2>How it works</h2><div class="steps card">
-  <div class="step"><i>1</i><div><b>Find a farm on the map.</b><br><span class="sub">Pick what you want: beef, chicken, eggs, vegetables, milk.</span></div></div>
-  <div class="step"><i>2</i><div><b>Order and agree on delivery.</b><br><span class="sub">Chat with the farmer to choose pickup or delivery and share the transport cost.</span></div></div>
-  <div class="step"><i>3</i><div><b>Pay on delivery.</b><br><span class="sub">No middlemen. Farmers keep more, households pay less.</span></div></div></div>
-  <h2>Where Mavuno is going</h2><div class="road">
-  <div><b>NOW</b>Farm map, price lists, orders, WhatsApp alerts</div>
-  <div><b>NEXT</b>M-Pesa payments held until delivery is confirmed</div>
-  <div><b>THEN</b>Farmer produce organizations (FPOs) selling in bulk</div>
-  <div><b>THEN</b>Extension officers and NGOs advising farmers</div></div>`;
+
+// ---- Auth screens
+function authView(mode = "in") {
+  const up = mode === "up";
+  $("#app").innerHTML = `<div class="auth"><h1>Mavuno</h1><p class="mut">Farm to plate, Kenya</p>
+  <form data-f="${mode}">
+  ${up ? `<input name="full_name" placeholder="Full name" required><input name="phone" placeholder="Phone (07…)" inputmode="tel" required><input name="county" placeholder="County" required>
+  <select name="role"><option value="buyer">I want to buy</option><option value="farmer">I am a farmer</option></select>` : ""}
+  <input name="email" type="email" placeholder="Email" required autocomplete="email">
+  <input name="password" type="password" placeholder="Password (6+ characters)" minlength="6" required autocomplete="${up ? "new-password" : "current-password"}">
+  <button class="btn" style="width:100%">${up ? "Create account" : "Log in"}</button></form>
+  <p class="mut c">${up ? `Have an account? <a href="#" data-a="auth" data-m="in">Log in</a>` : `New here? <a href="#" data-a="auth" data-m="up">Create account</a> · <a href="#" data-a="reset">Forgot password</a>`}</p>
+  ${up ? `<p class="mut c small">No email address? Make a free Gmail account first, then sign up here.</p>` : ""}</div>`;
 }
-function farm(id){
-  const f=FARMS.find(x=>x.id===id);sel=id;
-  const c=cart[id]||(cart[id]={});
-  const items=f.it;
-  const total=items.reduce((s,i,k)=>s+(c[k]||0)*i[2],0);
-  panel.innerHTML=`<button class="link" id="back">← All farms</button>
-  <div class="card" style="margin-top:8px"><div class="row"><div><div class="name">${f.n}</div><div class="sub">${f.o} · ${f.a}</div></div><div class="sub">★ ${f.r}</div></div>
-  ${f.id===1&&S.f.fimg?`<img class="ph" src="${S.f.fimg}" alt="Farm photo">`:""}<div style="margin-top:8px"><span class="badge ${f.v?"ver":"unv"}">${f.v?"✔ Verified by Mavuno team":"Not yet verified"}</span></div>
-  <div class="prac"><b>Farm practices (farmer-declared):</b> ${f.id===1&&(S.f.pest||S.f.fert||S.f.mgmt||S.f.pcm)?[["Pesticides",S.f.pest],["Fertilizers",S.f.fert],["Pest control",S.f.pcm],["Farming method",S.f.mgmt]].filter(x=>x[1]).map(x=>x[0]+": "+x[1]).join(" · "):f.p}</div>
-  <div class="sub">${done[f.id]?"📍 Exact location revealed (red dot on map)":"📍 Approximate area shown. Exact location is shared once you place an order."}</div></div>
-  <div class="card">${items.map((i,k)=>`<div class="item">${i[5]?`<img class="th" src="${i[5]}" alt="">`:""}<div style="flex:1">${EMO[i[0]]} ${i[1]}<div class="price">KES ${i[2]} <span class="sub">/ ${i[3]}${i[4]?" · "+i[4]+" available":""}</span></div></div><div class="qty"><button data-q="${k}" data-d="-1">−</button><span>${c[k]||0}</span><button data-q="${k}" data-d="1">+</button></div></div>`).join("")}
-  <button class="btn" id="order" ${total?"":"disabled"}>${total?`Place order · KES ${total.toLocaleString()} (pay on delivery)`:"Add items to order"}</button></div>${chat(f)}`;
-  pins();
+
+// ---- App shell
+function shell() {
+  const fm = S.p.role === "farmer";
+  $("#app").innerHTML = `<header><b>Mavuno</b><span class="mut">${esc(S.p.full_name)} · ${esc(S.p.role)}</span><a href="#" data-a="out">Log out</a></header>
+  <div id="pick" hidden></div>
+  <section id="v-map"><input id="q" placeholder="Search produce, farm or county"><div id="map"></div><div id="list"></div></section>
+  <section id="v-orders" hidden></section><section id="v-farm" hidden></section>
+  <nav><a href="#" data-a="nav" data-v="map">Map</a><a href="#" data-a="nav" data-v="orders">Orders</a>${fm ? `<a href="#" data-a="nav" data-v="farm">My farm</a>` : ""}</nav><div id="sheet" hidden></div>`;
+  show("map"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message));
 }
-function placed(id){
-  const f=FARMS.find(x=>x.id===id);done[id]=true;cart[id]={};pins();
-  panel.innerHTML=`<div class="ok"><div class="name">✅ Order sent to ${f.n}</div><ul><li>${f.o} is notified on <b>WhatsApp</b> and in the app.</li><li>Chat to agree on pickup or delivery and the transport cost.</li><li>The farm’s exact location is now revealed on the map.</li><li>Pay when your order arrives.</li></ul></div><button class="btn" id="back">Back to farms</button>`;
+function show(v) {
+  S.v = v; stopChat();
+  ["map", "orders", "farm"].forEach(k => { const e = $("#v-" + k); if (e) e.hidden = k !== v; });
+  document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
+  if (v === "map" && M) M.fix();
 }
-chipsEl.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;sel=null;chips();pins();home()};
-pinsEl.onclick=e=>{const p=e.target.closest(".pin");if(p)farm(+p.dataset.id)};
-panel.onclick=e=>{
-  const o=e.target.closest("[data-open]");if(o)return farm(+o.dataset.open);
-  if(e.target.closest("#back")){sel=null;pins();return home()}
-  const q=e.target.closest("[data-q]");
-  if(q){const c=cart[sel]||(cart[sel]={}),k=+q.dataset.q;c[k]=Math.max(0,(c[k]||0)+ +q.dataset.d);return farm(sel)}
-  const qk=e.target.closest("[data-quick]");if(qk){sendm(qk.dataset.quick);return farm(sel)}
-  if(e.target.closest("[data-send]")){sendm($("#chtin").value.trim());return farm(sel)}
-  if(e.target.closest("#order"))placed(sel);
+const nav = guard(async v => { show(v); if (v === "map") await loadFarms(); if (v === "orders") await loadOrders(); if (v === "farm") await farmView(); });
+
+// ---- Farms on the map
+async function loadFarms() {
+  S.farms = ok(await sb.from("farms").select("id,owner_id,name,description,county,ward,public_lat,public_lng,verified,products(id,name,category,price,unit,quantity_available,photo_url,active)"));
+  drawFarms();
+}
+function drawFarms() {
+  const q = ($("#q")?.value || "").toLowerCase().trim();
+  const fs = S.farms.filter(f => !q || [f.name, f.county, f.ward, ...(f.products || []).map(p => p.name)].join(" ").toLowerCase().includes(q));
+  if (M) { M.clear(); fs.forEach(f => f.public_lat != null && M.add(f.public_lat, f.public_lng, f.name, () => openFarm(f.id))); }
+  $("#list").innerHTML = fs.length ? fs.map(f => `<div class="card" data-a="farm" data-id="${f.id}" style="cursor:pointer"><b>${esc(f.name)}</b> ${f.verified ? `<span class="tag">Verified</span>` : ""}
+    <div class="mut small">${esc([f.ward, f.county].filter(Boolean).join(", "))}</div>
+    <div class="small">${(f.products || []).filter(p => p.active).slice(0, 4).map(p => esc(p.name)).join(" · ") || "No produce listed yet"}</div></div>`).join("")
+    : `<p class="mut c">${S.farms.length ? "No farms match your search." : "No farms yet. Farmers: create an account and add your farm."}</p>`;
+}
+const openFarm = guard(async id => {
+  const f = S.farms.find(x => x.id === id); if (!f) return;
+  if (f.public_lat != null && M) M.go(f.public_lat, f.public_lng, 12);
+  const loc = ok(await sb.from("farm_locations").select("lat,lng").eq("farm_id", id).maybeSingle());
+  const mine = S.farm?.id === id, items = (f.products || []).filter(p => p.active);
+  $("#sheet").hidden = false;
+  $("#sheet").innerHTML = `<div><div class="row"><h3 style="margin:0">${esc(f.name)}</h3><button class="alt" style="flex:0" data-a="close">Close</button></div>
+  <p class="mut">${esc([f.ward, f.county].filter(Boolean).join(", "))} ${f.verified ? `<span class="tag">Verified</span>` : `<span class="tag">Not yet verified</span>`}</p>
+  <p>${esc(f.description)}</p>
+  ${loc ? `<p><a href="https://www.google.com/maps?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener">Open exact farm location</a></p>` : `<p class="mut small">Exact location is shown after you send an order request.</p>`}
+  <form data-f="order" data-id="${id}">${items.length ? items.map(p => `<div class="pr">${p.photo_url ? `<img class="ph" loading="lazy" src="${esc(p.photo_url)}" alt="">` : ""}<div><b>${esc(p.name)}</b><div class="mut small">KES ${esc(p.price)} / ${esc(p.unit)}${p.quantity_available != null ? ` · ${esc(p.quantity_available)} available` : ""}</div></div>
+    ${mine ? "" : `<input type="number" min="0" step="any" name="q_${p.id}" placeholder="Qty">`}</div>`).join("") : `<p class="mut">Nothing listed yet.</p>`}
+  ${mine || !items.length ? "" : `<button class="btn" style="width:100%">Send order request</button><p class="mut small">Pay cash on delivery. Agree delivery details in chat.</p>`}</form></div>`;
+});
+
+// ---- Orders and chat
+async function loadOrders() {
+  stopChat();
+  const d = ok(await sb.from("orders").select("id,status,total,created_at,buyer_id,farm_id,farms(name),order_items(quantity,unit_price,products(name,unit))").order("created_at", { ascending: false }));
+  $("#v-orders").innerHTML = d.length ? d.map(o => {
+    const fmr = S.farm && o.farm_id === S.farm.id, b = (s, t, c = "") => `<button class="${c}" data-a="st" data-id="${o.id}" data-s="${s}">${t}</button>`;
+    let act = "";
+    if (fmr) act = o.status === "pending" ? b("accepted", "Accept") + b("rejected", "Reject", "bad") : o.status === "accepted" ? b("delivered", "Mark delivered") : "";
+    else act = ["pending", "accepted"].includes(o.status) ? b("cancelled", "Cancel", "bad") : o.status === "delivered" ? b("completed", "Confirm received") : "";
+    return `<div class="card"><div class="row"><b>${esc(o.farms?.name)}</b><span class="tag" style="flex:0">${esc(o.status)}</span></div>
+    <div class="mut small">${fmr ? "Incoming order" : "Your order"} · ${new Date(o.created_at).toLocaleDateString()}</div>
+    ${(o.order_items || []).map(i => `<div>${esc(i.quantity)} ${esc(i.products?.unit)} ${esc(i.products?.name)} × KES ${esc(i.unit_price)}</div>`).join("")}
+    <div><b>Total KES ${esc(o.total)}</b></div><div class="row" style="margin-top:8px">${act}<button class="alt" data-a="chat" data-id="${o.id}">Chat</button></div><div id="c-${o.id}"></div></div>`;
+  }).join("") : `<p class="mut c">No orders yet. Find a farm on the map and send an order request.</p>`;
+}
+const stopChat = () => { clearInterval(S.timer); S.timer = null; };
+const loadMsgs = guard(async id => {
+  const box = document.querySelector(`#c-${id} .msgs`); if (!box) return;
+  const d = ok(await sb.from("messages").select("sender_id,body,created_at").eq("order_id", id).order("created_at"));
+  box.innerHTML = d.map(m => `<div class="m ${m.sender_id === S.u.id ? "me" : ""}">${esc(m.body)}</div>`).join("") || `<p class="mut small">No messages yet. Say hello and agree on delivery.</p>`;
+  box.scrollTop = box.scrollHeight;
+});
+function toggleChat(id) {
+  const c = $("#c-" + id), open = c.innerHTML !== ""; document.querySelectorAll("[id^=c-]").forEach(e => e.innerHTML = ""); stopChat();
+  if (open) return;
+  c.innerHTML = `<div class="msgs"></div><form data-f="msg" data-id="${id}" class="row"><input name="body" placeholder="Type a message" required autocomplete="off"><button style="flex:0">Send</button></form>`;
+  loadMsgs(id); S.timer = setInterval(() => loadMsgs(id), 4000);
+}
+
+// ---- Farmer: my farm and products
+const farmView = guard(async () => {
+  S.farm = ok(await sb.from("farms").select("*").eq("owner_id", S.u.id).limit(1).maybeSingle());
+  const el = $("#v-farm");
+  if (!S.farm) {
+    el.innerHTML = `<h3>Set up your farm</h3><form data-f="farm"><input name="name" placeholder="Farm name" required><textarea name="description" rows="2" placeholder="What do you grow or keep?"></textarea>
+    <input name="county" placeholder="County" value="${esc(S.p.county)}" required><input name="ward" placeholder="Ward / village">
+    <p class="mut small">Farm location. Buyers only see an area about 100 m wide until they send you an order.</p>
+    <div class="row"><input name="lat" placeholder="Latitude" required><input name="lng" placeholder="Longitude" required></div>
+    <div class="row"><button type="button" class="alt" data-a="gps">Use my location</button><button type="button" class="alt" data-a="pick">Pick on map</button></div>
+    <button class="btn" style="width:100%;margin-top:10px">Create farm</button></form>`;
+    return;
+  }
+  const ps = ok(await sb.from("products").select("*").eq("farm_id", S.farm.id).order("created_at", { ascending: false }));
+  el.innerHTML = `<div class="card"><b>${esc(S.farm.name)}</b> <span class="tag">${S.farm.verified ? "Verified" : "Awaiting verification"}</span><div class="mut small">${esc([S.farm.ward, S.farm.county].filter(Boolean).join(", "))}</div></div>
+  <h3>Add produce</h3><form data-f="prod"><input name="name" placeholder="Product (e.g. Tomatoes)" required>
+  <div class="row"><select name="category"><option>Vegetables</option><option>Fruits</option><option>Grains</option><option>Dairy</option><option>Eggs and poultry</option><option>Meat</option><option>Other</option></select>
+  <select name="unit"><option>kg</option><option>bunch</option><option>crate</option><option>litre</option><option>piece</option><option>tray</option><option>bag</option></select></div>
+  <div class="row"><input name="price" type="number" min="0" step="any" placeholder="Price (KES)" required><input name="qty" type="number" min="0" step="any" placeholder="Quantity available"></div>
+  <input name="photo" type="file" accept="image/*"><button class="btn" style="width:100%">Add</button></form>
+  <h3>Your produce</h3>${ps.map(p => `<div class="pr">${p.photo_url ? `<img class="ph" src="${esc(p.photo_url)}" alt="">` : ""}<div><b>${esc(p.name)}</b> ${p.active ? "" : `<span class="tag">Hidden</span>`}<div class="mut small">KES ${esc(p.price)} / ${esc(p.unit)} · ${esc(p.quantity_available ?? "–")} available</div></div>
+  <button class="alt" style="flex:0" data-a="tog" data-id="${p.id}" data-on="${p.active ? 1 : 0}">${p.active ? "Hide" : "Show"}</button></div>`).join("") || `<p class="mut">No produce yet.</p>`}`;
+});
+
+// ---- Click and submit handlers
+const A = {
+  auth: d => authView(d.m),
+  reset: guard(async () => { const e = prompt("Your account email"); if (!e) return; ok(await sb.auth.resetPasswordForEmail(e, { redirectTo: location.href.split("#")[0] })); toast("Check your email for the reset link."); }),
+  out: () => sb.auth.signOut(),
+  nav: d => nav(d.v),
+  farm: d => openFarm(d.id),
+  close: () => { $("#sheet").hidden = true; },
+  chat: d => toggleChat(d.id),
+  st: guard(async d => { ok(await sb.from("orders").update({ status: d.s }).eq("id", d.id)); await loadOrders(); toast("Order " + d.s); }),
+  tog: guard(async d => { ok(await sb.from("products").update({ active: d.on !== "1" }).eq("id", d.id)); await farmView(); }),
+  gps: () => navigator.geolocation ? navigator.geolocation.getCurrentPosition(p => setLoc(p.coords.latitude, p.coords.longitude), () => toast("Could not get your location. Use Pick on map."), { enableHighAccuracy: true }) : toast("Location is not available on this device."),
+  pick: () => { $("#pick").hidden = false; $("#pick").textContent = "Tap your farm on the map"; show("map"); pickCb = (la, lo) => { pickCb = null; $("#pick").hidden = true; setLoc(la, lo); show("farm"); }; }
 };
-const ROLES={buyer:["🛒","Local buyer (household or food vendor)","Order fresh food from nearby farms and FPOs",["Full name","Phone (WhatsApp)","Ward / village"]],farmer:["🧑‍🌾","Farmer","List your farm and sell directly",["Full name","Phone (WhatsApp)","Farm name","Ward / village","County","Directions to your farm (landmarks, road, nearest centre)"]],fpo:["🤝","Farmer produce organization (FPO)","Sell members’ produce in bulk",["Organization name","Registration no.","Contact phone","County"]],officer:["🧑‍💼","County agricultural officer","Confirm verifications, resolve complaints, oversee CBFs",["Full name","Phone","Office or organization","Ward(s) covered","Staff or ID no."]],rider:["🏍️","Boda boda / delivery rider","Deliver orders for farmers and buyers",["Full name","Phone","Ward(s) served","Plate no."]],cbf:["🎓","Community-based facilitator (CBF)","Train and monitor farmers, do verification visits",["Full name","Phone","Ward(s) you serve","Areas you train in (crops, livestock...)","County office or partner you work with"]],ngo:["🏢","NGO or partner organization","Support, train and monitor farmers at scale",["Organization name (e.g. CIDCO, CGA, Vibrant Village)","Registration no.","Contact person and phone","Counties and wards of work","Type of work (training, monitoring, verification)"]],bulk:["🏪","Bulk buyer (supermarket, distributor, restaurant, school)","Buy large quantities straight from FPOs and farms",["Business name","Business registration no.","Contact person and phone","Location and delivery points","What you buy and roughly how much"]],agrovet:["🏬","Agrovet / input supplier","Sell inputs and advise farmers",["Shop name","Licence or registration no.","Contact person and phone","Location and wards served","Inputs you sell (seeds, fertilizer, feed, drip kits...)"]],paravet:["🩺","Paravet / animal health worker","Give animal health advice to farmers",["Full name","Phone","Ward(s) served","Training or registration no.","Animals you treat"]]};
-const S={role:null,reg:null,f:{},ot:"v",gps:0,rep:0,inc:"New",rj:"New",vd:0,vf:"none",
-ord:[{f:"Amani Greens",t:"Kales ×3, Tomatoes ×2",amt:360,st:"Delivered"}],
-cx:[{id:1,f:"Shamba Fresh",b:"Wanjiru T.",r:"Poor quality",d:"Tomatoes arrived soft and spoiled. Photos attached.",st:"open"}],
-vq:[{id:2,n:"Kilima Poultry",w:"Kima",stage:"review"},{id:3,n:"Neema Farm",w:"Luanda South",stage:"visit"}],tr:[["Safe use of pesticides","Saturday · Luanda social hall",18],["Composting and soil health","Next week · Kima",12]],nt:[],ch:{1:[]},fs:[["Tomatoes (sample)",100,"500 kg available",""],["County fresh pack: kales, herbs, onions (sample)",350,"20 packs available",""]],pg:"",mode:"",auth:0,hr:[{to:"cbf",f:"John O. (Shamba Fresh)",t:"Kales have yellow spots, need advice",st:"new",ch:"Phone call",lg:"Luhya"},{to:"paravet",f:"Peter M. (Kilima Poultry)",t:"Chickens are coughing, need advice",st:"new",ch:"WhatsApp",lg:"Swahili"}],bq:[{id:1,b:"Sample Supermarket",p:"Tomatoes",q:"300 kg weekly",st:"open"}],
-prods:[["vegetables","Kales (sukuma)",40,"bunch"]]};
-const A=$("#acct");
-const fld=(l,k,t="text")=>`<label class="fld">${l}<input data-k="${k}" type="${t}" value="${S.f[k]||""}"></label>`;
-const pill=(t,c)=>`<span class="badge ${c}">${t}</span>`;
-const cxl=c=>`<div class="item"><div>${c.r}<div class="sub">${c.b}: ${c.d}</div></div>${c.st==="open"?pill("Open","unv"):pill(c.st,"ver")}</div>`;
-function acct(){
- if(!S.auth&&S.mode!=="su")return A.innerHTML=authHtml();
- if(!S.role){
-  if(!S.reg)return A.innerHTML=`<button class="link" data-a="out">← Back to sign in</button><h2 style="margin-top:0">Create your Mavuno account</h2><div class="prac">Demo tip: follow one order end to end. Buyer reports a problem, then switch to Officer to resolve it. Farmer signs up, then a CBF visits, then the Officer confirms the badge. A farmer asks for help and a CBF replies. A supermarket posts a bulk request and the FPO quotes.</div>`+Object.entries(ROLES).map(([k,r])=>`<div class="card" data-a="reg" data-v="${k}" style="cursor:pointer"><div class="name">${r[0]} ${r[1]}</div><div class="sub">${r[2]}</div></div>`).join("");
-  const r=ROLES[S.reg];
-  return A.innerHTML=`<button class="link" data-a="reset">← Back</button><h2>${r[0]} ${r[1]}</h2><div class="card">${r[3].map((l,i)=>fld(l,"r"+i)).join("")}${S.reg==="farmer"?`<p class="sub">After you sign up, a CBF visits to verify your farm using your directions. No request needed.</p>`:""}${["officer","cbf","ngo","paravet","agrovet"].includes(S.reg)?`<p class="sub">Accounts for officers, CBFs and partner organizations are approved by the county agricultural office and Mavuno admins before going live.</p>`:""}<button class="btn" data-a="join">Create account</button></div>`;
- }
- const r=ROLES[S.role];
- A.innerHTML=`<div class="row"><h2 style="margin:6px 0">${r[0]} ${r[1].split(" (")[0]}</h2><span><button class="link" data-a="reset">Switch role</button> · <button class="link" data-a="out">Sign out</button></span></div>`+(PAGES[S.role]?`<div class="tabs">${PAGES[S.role].map(p=>`<button class="tab ${S.pg===p[0]?"on":""}" data-a="pg" data-v="${p[0]}">${p[1]}</button>`).join("")}</div>`:"")+({farmer,buyer,officer,fpo,rider,cbf,ngo,bulk,agrovet,paravet}[S.role])()+(S.role==="officer"||S.role==="ngo"?hrl(S.role):"");pgApply();
+function setLoc(la, lo) { const f = document.querySelector("form[data-f=farm]"); if (f) { f.lat.value = la.toFixed(6); f.lng.value = lo.toFixed(6); } }
+document.addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (!b) return; e.preventDefault(); A[b.dataset.a]?.(b.dataset, b); });
+document.addEventListener("input", e => { if (e.target.id === "q") drawFarms(); });
+
+const F = {
+  in: async fd => { ok(await sb.auth.signInWithPassword({ email: fd.get("email").trim(), password: fd.get("password") })); },
+  up: async fd => {
+    const r = ok(await sb.auth.signUp({ email: fd.get("email").trim(), password: fd.get("password"), options: { data: { full_name: fd.get("full_name").trim(), phone: fd.get("phone").trim(), county: fd.get("county").trim(), role: fd.get("role") } } }));
+    if (!r.session) { authView("in"); toast("Account created. Open the email we sent you, confirm, then log in."); }
+  },
+  order: async (fd, f) => {
+    const farm = S.farms.find(x => x.id === f.dataset.id), lines = [];
+    (farm.products || []).forEach(p => { const q = parseFloat(fd.get("q_" + p.id)); if (q > 0) lines.push({ p, q }); });
+    if (!lines.length) return toast("Enter a quantity for at least one product.");
+    const total = lines.reduce((s, l) => s + l.q * l.p.price, 0);
+    const o = ok(await sb.from("orders").insert({ buyer_id: S.u.id, farm_id: farm.id, total, payment_mode: "cash_on_delivery", fulfilment: "to_negotiate" }).select("id").single());
+    const it = await sb.from("order_items").insert(lines.map(l => ({ order_id: o.id, product_id: l.p.id, quantity: l.q, unit_price: l.p.price })));
+    if (it.error) { await sb.from("orders").update({ status: "cancelled" }).eq("id", o.id); throw it.error; }
+    A.close(); await nav("orders"); toast("Order request sent. Chat with the farmer to agree delivery.");
+  },
+  msg: async (fd, f) => { ok(await sb.from("messages").insert({ order_id: f.dataset.id, sender_id: S.u.id, body: fd.get("body").trim() })); f.reset(); await loadMsgs(f.dataset.id); },
+  farm: async fd => {
+    const la = parseFloat(fd.get("lat")), lo = parseFloat(fd.get("lng"));
+    if (isNaN(la) || isNaN(lo)) return toast("Set your farm location first.");
+    const j = () => (Math.random() - .5) * 0.0018;   // about ±100 m public blur
+    const f = ok(await sb.from("farms").insert({ owner_id: S.u.id, name: fd.get("name").trim(), description: fd.get("description").trim(), county: fd.get("county").trim(), ward: fd.get("ward").trim(), public_lat: la + j(), public_lng: lo + j() }).select("id").single());
+    ok(await sb.from("farm_locations").insert({ farm_id: f.id, lat: la, lng: lo }));
+    toast("Farm created. Now add your produce."); await farmView();
+  },
+  prod: async (fd, form) => {
+    let photo_url = null; const file = fd.get("photo");
+    if (file && file.size) {
+      if (file.size > 3e6) return toast("Photo is too big. Use one under 3 MB.");
+      const path = `${S.u.id}/${Date.now()}-${file.name.replace(/[^\w.]/g, "")}`;
+      ok(await sb.storage.from("photos").upload(path, file)); photo_url = sb.storage.from("photos").getPublicUrl(path).data.publicUrl;
+    }
+    ok(await sb.from("products").insert({ farm_id: S.farm.id, name: fd.get("name").trim(), category: fd.get("category"), unit: fd.get("unit"), price: parseFloat(fd.get("price")), quantity_available: fd.get("qty") === "" ? null : parseFloat(fd.get("qty")), photo_url }));
+    toast("Produce added."); await farmView();
+  }
+};
+document.addEventListener("submit", e => { e.preventDefault(); const f = e.target; guard(F[f.dataset.f])(new FormData(f), f); });
+
+// ---- Start-up
+async function start(u) {
+  S.u = u; if (!u) return authView("in");
+  S.p = ok(await sb.from("profiles").select("*").eq("id", u.id).single());
+  if (S.p.role === "farmer") S.farm = ok(await sb.from("farms").select("*").eq("owner_id", u.id).limit(1).maybeSingle());
+  shell();
 }
-function farmer(){
- const vs={none:pill("Not verified","unv"),pending:pill("Awaiting visit","unv"),verified:pill("✔ Verified","ver")}[S.vf];
- const mine=S.cx.filter(c=>c.f==="Amani Greens");
- return `<div class="card"><div class="row"><div><div class="name">Amani Greens</div><div class="sub">Luanda Township · Vihiga</div></div>${vs}</div></div>
-<div class="card"><b>1. Farm location and directions</b>${fld("Directions (landmarks, road, nearest centre)","r5")}${ph("Farm photo (optional)","fimg")}<div class="sub">${S.gps?"📍 Pin saved. Buyers see only a ~100 m area until they order.":"Stand on your farm and tap below, or drop the pin on the map."}</div><button class="btn2" data-a="gps">${S.gps?"Re-capture GPS pin":"📍 Use my phone GPS"}</button></div>
-<div class="card"><b>2. Farm practices</b>${fld("Pesticides used","pest")}${fld("Fertilizers used","fert")}${fld("Pest control method (e.g. neem spray, traps)","pcm")}${fld("How the farm is managed","mgmt")}<div class="sub" style="margin-top:8px">Shown to buyers as farmer-declared.</div></div>
-<div class="card"><b>3. Products and prices</b>${S.prods.map(p=>`<div class="item">${p[5]?`<img class="th" src="${p[5]}" alt="">`:""}<div style="flex:1">${EMO[p[0]]} ${p[1]}</div><div class="price">KES ${p[2]}/${p[3]}${p[4]?" · "+p[4]:""}</div></div>`).join("")}<div class="addp"><select data-k="pc">${CATS.slice(1).map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("")}</select><input data-k="pn" placeholder="Item name" value="${S.f.pn||""}"><input data-k="pp" type="number" placeholder="Price KES" value="${S.f.pp||""}"><input data-k="pu" placeholder="Unit (kg, bunch, tray)" value="${S.f.pu||""}"><input data-k="pq" placeholder="Quantity available (e.g. 300 kg)" value="${S.f.pq||""}"></div>${ph("Photo of this product","pimg")}<button class="btn2" data-a="addp">+ Add product</button></div>
-<div class="card"><b>4. Verification</b><div class="sub">${{none:"After you sign up, our team visits your farm.",pending:"Nothing to request. A CBF will visit using your directions to check your location, practices and produce, then the county officer confirms your badge.",verified:"Your farm now carries the verified badge on the map."}[S.vf]}</div></div>
-<div class="card"><b>Messages from buyers</b>${(S.ch[1]||[]).length?S.ch[1].map(x=>`<div class="item"><div>${x[0]==="you"?"Buyer":"You"}: ${x[1]}</div></div>`).join("")+fld("Reply to buyer","fr")+`<button class="btn2" data-a="freply">Send reply</button>`:`<div class="sub">No messages yet. Buyers who want your produce will message you here.</div>`}</div>
-<div class="card"><b>Get help</b><div class="sub">Reach out to a CBF, the county agricultural officer or a partner organization whenever you need advice.</div><label class="fld">Who do you want to ask?<select data-k="ht"><option value="cbf">Community-based facilitator</option><option value="officer">County agricultural officer</option><option value="ngo">Partner organization</option><option value="paravet">Paravet (animal health)</option><option value="agrovet">Agrovet (inputs and advice)</option></select></label><label class="fld">How should they reach you?<select data-k="hc"><option>In-app chat</option><option>Phone call</option><option>WhatsApp</option></select></label><label class="fld">Language<select data-k="hl"><option>English</option><option>Swahili</option><option>Luhya</option><option>Other local language</option></select></label>${fld("What do you need help with?","hn")}<button class="btn2" data-a="ask">Send request</button>${S.hr.filter(h=>h.mine).map(h=>`<div class="item"><div>${h.t}<div class="sub">To: ${{cbf:"CBF",officer:"County officer",ngo:"Partner organization",paravet:"Paravet",agrovet:"Agrovet"}[h.to]+" · "+(h.ch||"In-app chat")+" · "+(h.lg||"English")}</div></div>${h.st==="new"?pill("Sent","unv"):pill("Answered","ver")}</div>`).join("")}</div>
-<div class="card"><b>Incoming order</b><div class="sub">Wanjiru T. · Kales ×3, Tomatoes ×2 · KES 360 · pay on delivery</div>${S.inc==="New"?`<button class="btn2" data-a="acc">Accept order</button>`:`<div class="sub">Accepted. Chat with the buyer to arrange delivery.</div>`}</div>
-${GUIDES.map(g=>`<div class="card"><b>Guide: ${g[0]}</b><div style="margin-top:8px">${g[1]}</div><div class="sub" style="margin-top:8px">Source: Vihiga County Call Centre proposal. Check with your CBF or county officer before applying.</div></div>`).join("")}${S.nt.length?`<div class="card"><b>Notices from partners</b>${S.nt.map(n=>`<div class="item"><div>${n}</div></div>`).join("")}</div>`:""}${mine.length?`<div class="card"><b>Complaints about my farm</b>${mine.map(cxl).join("")}</div>`:""}`;
-}
-function buyer(){
- const o=S.ord[0];
- return `<div class="card"><b>My orders</b><div class="item"><div>${o.f}<div class="sub">${o.t} · KES ${o.amt}</div></div>${pill(o.st,o.st==="Delivered"?"ver":"unv")}</div>${o.st==="Delivered"?(S.rep?`<div class="prac"><b>Report a problem</b> (within 24 h of delivery)<label class="fld">What went wrong<select data-k="rr"><option>Poor quality</option><option>Wrong or missing items</option><option>Farmer did not deliver</option></select></label>${fld("Details","rd")}<div class="sub" style="margin-top:8px">📷 Add at least one photo as evidence (demo)</div><button class="btn" data-a="sub">Send to an extension officer</button></div>`:`<button class="btn2" data-a="rep">Report a problem with this order</button>`):""}</div>
-${S.cx.filter(c=>c.b==="You").map(c=>`<div class="card"><b>My complaint</b>${cxl(c)}</div>`).join("")}<div class="card"><b>Reviews</b><div class="sub">Rate each farm after delivery to help other households.</div></div>`;
-}
-function officer(){
- const open=S.cx.filter(c=>c.st==="open"),rq=S.vq.filter(q=>q.stage==="review");
- const t=`<div class="tabs"><button class="tab ${S.ot==="v"?"on":""}" data-a="ot" data-v="v">Confirm verification (${rq.length})</button><button class="tab ${S.ot==="c"?"on":""}" data-a="ot" data-v="c">Complaints (${open.length})</button></div>`;
- if(S.ot==="v")return t+(rq.length?rq.map(q=>`<div class="card"><div class="name">${q.n}</div><div class="sub">${q.w} · CBF visit completed, report submitted</div><div class="chk">☐ GPS pin matches the farm · ☐ Declared practices confirmed · ☐ Produce seen on site</div><div class="row2"><button class="btn" data-a="ok" data-v="${q.id}">Approve</button><button class="btn2" data-a="no" data-v="${q.id}">Reject</button></div></div>`).join(""):`<div class="card sub">No farms waiting. ${S.vd} verified this session.</div>`);
- return t+(S.cx.length?S.cx.map(c=>`<div class="card"><div class="row"><div class="name">${c.f}</div>${c.st==="open"?pill("Open","unv"):pill(c.st,"ver")}</div><div class="sub">Buyer: ${c.b} · ${c.r}</div><div class="prac">${c.d}<br><b>Rules check:</b> reported within 24 h ✔ · photo evidence ✔</div>${c.st==="open"?`<div class="row2"><button class="btn2" data-a="res" data-v="${c.id}" data-o="Refunded buyer">Refund buyer</button><button class="btn2" data-a="res" data-v="${c.id}" data-o="Partial refund">Partial refund</button><button class="btn2" data-a="res" data-v="${c.id}" data-o="Dismissed">Dismiss</button></div>`:""}</div>`).join(""):`<div class="card sub">No complaints.</div>`);
-}
-function fpo(){return `<div class="card"><div class="name">Luanda Farmers’ Produce Organization</div><div class="sub">Vihiga County · sample FPO</div></div><div class="card"><b>Stock listed by the FPO</b>${S.fs.map(s=>`<div class="item">${s[3]?`<img class="th" src="${s[3]}" alt="">`:""}<div style="flex:1">${s[0]}<div class="sub">${s[2]}</div></div><div class="price">KES ${s[1]}</div></div>`).join("")}<div class="addp"><input data-k="sn" placeholder="Product" value="${S.f.sn||""}"><input data-k="sp" type="number" placeholder="Price KES" value="${S.f.sp||""}"><input data-k="sq" placeholder="Quantity (e.g. 500 kg)" value="${S.f.sq||""}"></div>${ph("Photo of the stock","simg")}<button class="btn2" data-a="addstk">+ List stock</button></div>
-<div class="card"><b>Member farmers</b>${[["Grace A.","120 kg tomatoes"],["Peter M.","40 trays of eggs"],["Lucy N.","60 kg sweet potatoes"]].map(m=>`<div class="item"><div>${m[0]}</div><div class="sub">${m[1]} this week</div></div>`).join("")}<button class="btn2" data-a="noop">+ Invite a farmer</button></div><div class="card"><b>Bulk requests from supermarkets and distributors</b>${S.bq.map(r=>`<div class="item"><div>${r.b}<div class="sub">${r.p} · ${r.q}</div></div>${r.st==="open"?`<button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="quote" data-v="${r.id}">Send quote</button>`:pill("Quoted","ver")}</div>`).join("")}</div><div class="card"><b>Bulk listing and payouts</b><div class="sub">Members’ produce is listed under the FPO. When it sells, the FPO keeps the commission it sets and pays the rest to each member directly or through their savings group.</div></div>`}
-function rider(){return `<div class="card"><b>Delivery jobs near you</b><div class="item"><div>Amani Greens to Luanda Market Rd<div class="sub">Fee agreed with the farmer: KES 100</div></div>${S.rj==="New"?`<button class="btn2" style="width:auto;margin:0;padding:8px 14px" data-a="job">Accept</button>`:pill("Accepted","ver")}</div></div>`}
-function cbf(){
- const todo=S.vq.filter(q=>q.stage==="visit");
- return `<div class="card"><div class="name">Community-based facilitator</div><div class="sub">Works with the county agricultural office · Luanda ward</div></div>
-<div class="card"><b>Farm visits to do (${todo.length})</b>${todo.length?todo.map(q=>`<div class="item"><div>${q.n}<div class="sub">${q.w} · verification visit</div><div class="chk">${q.id==="A"?"Directions from the farmer: "+(S.f.r5||"not provided"):"Directions posted by the farmer"}. Check the GPS pin, declared practices and produce on site.</div></div><button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="vis" data-v="${q.id}">Submit report</button></div>`).join(""):`<div class="sub">No visits waiting.</div>`}<div class="sub" style="margin-top:8px">Your report goes to the county agricultural officer, who confirms the verified badge.</div></div>
-<div class="card"><b>Training sessions</b>${S.tr.map(t=>`<div class="item"><div>${t[0]}<div class="sub">${t[1]}</div></div>${pill(t[2]+" farmers","ver")}</div>`).join("")}${fld("New session topic","tt")}<button class="btn2" data-a="trn">+ Schedule a training</button></div>
-${hrl("cbf")}`;
-}
-function ngo(){
- const k=(n,l)=>`<div class="card" style="flex:1;margin:0"><b>${n}</b><div class="sub">${l}</div></div>`;
- return `<div class="card"><div class="name">Vibrant Village (demo)</div><div class="sub">Vihiga County · works with the county agricultural office</div></div>
-<div class="card"><b>Programme reach (sample figures)</b><div class="row2" style="margin-top:8px">${k(126,"farmers enrolled")}${k(8,"CBFs working with us")}${k(41,"farms verified")}</div></div>
-<div class="card"><b>Partner organizations in this demo</b><div class="sub">CIDCO · CGA · Vibrant Village. These names are examples only, not confirmed partners.</div></div>
-<div class="card"><b>What partners can do</b><div class="sub">• Answer help requests and offer services farmers can ask for<br>• Fund and track trainings and farm visits<br>• Send advice, alerts and training notices to farmers<br>• See verification and complaint trends for your programme</div></div>
-<div class="card"><b>Send a notice to farmers</b>${fld("Notice","nn")}<button class="btn2" data-a="note">Publish notice</button>${S.nt.map(n=>`<div class="item"><div>${n}</div>${pill("Sent","ver")}</div>`).join("")}<div class="sub" style="margin-top:8px">Notices show up on farmer dashboards.</div></div>`;
-}
-const PAGES={farmer:[["pro","Profile"],["prd","Products"],["ord","Orders"],["hlp","Help"],["lrn","Learn"]],fpo:[["mem","Members"],["stk","Stock"],["bulk","Bulk"],["pay","Payouts"]],cbf:[["vis","Visits"],["trn","Training"],["hlp","Requests"]]};
-const PGM=[["1. Farm","pro"],["2. Farm","pro"],["4. Verif","pro"],["3. Prod","prd"],["Messages","ord"],["Incoming","ord"],["Get help","hlp"],["Notices","hlp"],["Complaints","hlp"],["Stock listed","stk"],["Member farmers","mem"],["Bulk requests","bulk"],["Bulk listing","pay"],["Farm visits","vis"],["Training sessions","trn"],["Help requests","hlp"],["Guide:","lrn"]];
-function pgApply(){const p=PAGES[S.role];if(!p)return;if(!p.some(x=>x[0]===S.pg)){S.pg=p[0][0];return acct()}A.querySelectorAll(".card").forEach(c=>{const b=c.firstElementChild;if(!b||b.tagName!=="B")return;const m=PGM.find(x=>b.textContent.startsWith(x[0]));c.hidden=!!m&&m[1]!==S.pg})}
-function syncTabs(){$("#mt").hidden=!S.auth;if(!S.auth){$("#explore").hidden=true;A.hidden=false}document.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",(x.dataset.t==="explore")===!$("#explore").hidden))}
-const ph=(l,k)=>`<label class="fld">${l}<input type="file" accept="image/*" data-img="${k}"></label>${S.f[k]?`<img class="ph" src="${S.f[k]}" alt="">`:""}`;
-const img=(f,cb)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,480/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};i.src=r.result};r.readAsDataURL(f)};
-A.onchange=e=>{const t=e.target,f=t.files&&t.files[0];if(t.dataset.img&&f)img(f,u=>{S.f[t.dataset.img]=u;acct()})};
-const authHtml=()=>`<div style="text-align:center;padding:10px 0"><div class="logo" style="font-size:30px">🌾 Mavuno</div><p class="sub">Buy and sell farm produce directly. Farmers, FPOs, buyers, officers and partners in one place.</p></div><div class="card"><b>New here?</b><button class="btn" data-a="su">Create account</button></div><div class="card"><b>Sign in</b>${fld("Phone number","lph")}${fld("PIN","lpw","password")}<label class="fld">Demo: sign in as (any phone and PIN works)<select data-k="lrl">${Object.entries(ROLES).map(([k,r])=>`<option value="${k}">${r[1].split(" (")[0]}</option>`).join("")}</select></label><button class="btn" data-a="si">Sign in</button></div><button class="link" data-a="browse">Just looking? View the map</button>`;
-const GUIDES=[["Greenhouse and high tunnel basics","Pick well-drained soil to avoid waterlogging. Make the ventilation outlet open leeward and be at least 30% of the floor area. Do a baseline survey first: topography, soil type, security, wind direction and water. Replace the greenhouse poly (200 microns) after 3 years and the insect net after 5 years. Dust the polythene with a soft cloth every 3 months. Make grow beds 90 cm wide and 30 cm high. Change the foot bath water and disinfectant after one week."],["Vertical gardens and bags","Vertical rack gardens, a 100-vertical-bag model and vertical vegetable tunnels let you grow more vegetables in a small space, for home use and for sale."],["Organic fertilizer support","Composting, permaculture and conservation agriculture."],["Water supply","Options shown: rainwater harvesting, shallow wells and boreholes, spring protection, surface water harvesting and solar-powered pumps."],["Solar drying and value addition","Solar dryers help preserve vegetables, and dried vegetable mixes such as a soup mix add value. County-branded fresh packs are another way to add value."],["Silage for one cow","A plot of 1 m by 15 m with 200 maize seeds, irrigated, is shown to give about 400 kg of fodder within 3 months."]];
-function paravet(){return `<div class="card"><div class="name">Animal health worker</div><div class="sub">Answers farmers’ livestock questions and works with the county veterinary office</div></div>`+hrl("paravet")}
-function agrovet(){return `<div class="card"><div class="name">Agrovet / input supplier</div><div class="sub">Sells inputs and advises farmers. Farmers can ask you for help.</div></div><div class="card"><b>Inputs catalogue (sample)</b><div class="item"><div>Certified vegetable seeds</div></div><div class="item"><div>Compost and organic fertilizer</div></div><div class="item"><div>Drip irrigation kits</div></div><div class="item"><div>Animal feed</div></div></div>`+hrl("agrovet")}
-const hrl=r=>{const l=S.hr.map((h,i)=>[h,i]).filter(x=>x[0].to===r);return `<div class="card"><b>Help requests from farmers (${l.filter(x=>x[0].st==="new").length} new)</b>${l.length?l.map(x=>`<div class="item"><div>${x[0].f}<div class="sub">${x[0].t}</div><div class="sub">${x[0].ch||"In-app chat"} · ${x[0].lg||"English"}</div></div>${x[0].st==="new"?`<button class="btn2" style="width:auto;margin:0;padding:8px 12px" data-a="ans" data-v="${x[1]}">Reply</button>`:pill("Answered","ver")}</div>`).join(""):`<div class="sub">No requests yet. Farmers contact you directly when they need help.</div>`}</div>`};
-const sendm=t=>{if(!t)return;(S.ch[sel]=S.ch[sel]||[]).push(["you",t]);if(sel!==1)S.ch[sel].push(["farm","Karibu! Yes, we can pack that. Pay on delivery works for us. (demo auto-reply)"])};
-const chat=f=>{const m=S.ch[f.id]||[],q=f.it[f.it.length-1];return `<div class="card"><b>Chat with ${f.o}</b><div class="sub">Anyone can message a farm. Agree on the amount, packing, delivery and payment terms.</div>${m.map(x=>`<div class="item" style="justify-content:${x[0]==="you"?"flex-end":"flex-start"}"><div class="prac" style="margin:0;max-width:85%">${x[1]}</div></div>`).join("")}<div class="row2"><button class="btn2" data-quick="I would like ${q[1]} worth KES 300. Can you pack it?">KES 300 of ${q[1]}</button><button class="btn2" data-quick="What are your payment terms?">Payment terms?</button></div><label class="fld">Your message<input id="chtin" placeholder="Type a message"></label><button class="btn" data-send="1">Send</button></div>`};
-function bulk(){return `<div class="card"><div class="name">Sample supermarket</div><div class="sub">Buy in bulk straight from FPOs and farms, no middlemen</div></div>
-<div class="card"><b>Post a bulk request</b>${fld("Product (e.g. Tomatoes)","bp")}${fld("Quantity and how often (e.g. 300 kg weekly)","bq2")}<button class="btn" data-a="bpost">Send to FPOs and farms</button></div>
-<div class="card"><b>My requests</b>${S.bq.map(r=>`<div class="item"><div>${r.p}<div class="sub">${r.q}</div></div>${r.st==="open"?pill("Waiting for quotes","unv"):pill("Quote received","ver")}</div>`).join("")}</div>`}
-A.onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,v=b.dataset.v;
- if(a==="reg")S.reg=v;else if(a==="reset")S.role=S.reg=null;else if(a==="join"){S.role=S.reg;S.auth=1;S.mode="";if(S.reg==="farmer"&&S.vf==="none"&&!S.vq.some(q=>q.id==="A")){S.vf="pending";S.vq.unshift({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}}
- else if(a==="gps")S.gps=1;
- else if(a==="addp"){const f=S.f;if(f.pn&&f.pp){const it=[f.pc||"vegetables",f.pn,+f.pp,f.pu||"kg",f.pq||"",f.pimg||""];S.prods.push(it);FARMS[0].it.push(it);f.pn=f.pp=f.pu=f.pq=f.pimg=""}}
- else if(a==="reqv"){S.vf="pending";S.vq.unshift({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}
- else if(a==="acc")S.inc="OK";else if(a==="rep")S.rep=1;
- else if(a==="sub"){S.cx.unshift({id:9,f:"Amani Greens",b:"You",r:S.f.rr||"Poor quality",d:S.f.rd||"No details given",st:"open"});S.ord[0].st="Complaint filed";S.rep=0}
- else if(a==="ot")S.ot=v;
- else if(a==="ok"||a==="no"){S.vq=S.vq.filter(q=>String(q.id)!==v);if(a==="ok")S.vd++;if(v==="A"){S.vf=a==="ok"?"verified":"pending";FARMS[0].v=a==="ok"?1:0;if(a==="no")S.vq.push({id:"A",n:"Amani Greens (demo farm)",w:"Luanda Township",stage:"visit"})}}
- else if(a==="res")S.cx.find(x=>x.id==v).st=b.dataset.o;
- else if(a==="job")S.rj="OK";
- else if(a==="vis"){const q=S.vq.find(x=>String(x.id)===v);if(q)q.stage="review"}
- else if(a==="trn"){if(S.f.tt){S.tr.push([S.f.tt,"Date to be set",0]);S.f.tt=""}}
- else if(a==="note"){if(S.f.nn){S.nt.unshift(S.f.nn);S.f.nn=""}}
- else if(a==="ask"){if(S.f.hn){S.hr.push({to:S.f.ht||"cbf",f:"Grace A. (Amani Greens)",t:S.f.hn,st:"new",mine:1,ch:S.f.hc||"In-app chat",lg:S.f.hl||"English"});S.f.hn=""}}
- else if(a==="ans")S.hr[+v].st="done";
- else if(a==="su")S.mode="su";
- else if(a==="si"){S.role=S.f.lrl||"buyer";S.auth=1}
- else if(a==="out"){S.auth=0;S.mode="";S.role=S.reg=null}
- else if(a==="browse"){S.auth=1;S.role=null;$('[data-t="explore"]').click()}
- else if(a==="pg")S.pg=v;
- else if(a==="addstk"){const f=S.f;if(f.sn&&f.sp){S.fs.push([f.sn,+f.sp,f.sq||"",f.simg||""]);f.sn=f.sp=f.sq=f.simg=""}}
- else if(a==="freply"){if(S.f.fr){(S.ch[1]=S.ch[1]||[]).push(["farm",S.f.fr]);S.f.fr=""}}
- else if(a==="quote")S.bq.find(r=>r.id==v).st="quoted";
- else if(a==="bpost"){if(S.f.bp&&S.f.bq2){S.bq.unshift({id:Date.now(),b:"Your business",p:S.f.bp,q:S.f.bq2,st:"open"});S.f.bp=S.f.bq2=""}}
- acct();syncTabs()};
-A.oninput=e=>{const k=e.target.dataset.k;if(k)S.f[k]=e.target.value};
-document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=b.dataset.t;$("#explore").hidden=t!=="explore";A.hidden=t!=="acct";document.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",x===b));if(t==="acct")acct()});
-const ICO={lrn:"📚",pro:"👤",prd:"📦",ord:"🧾",hlp:"🙋",mem:"👥",stk:"📦",bulk:"🏪",pay:"💸",vis:"📍",trn:"🎓"};
-S.view="acct";
-function sb(){
- const role=S.role,r=role?ROLES[role]:null,pg=PAGES[role]||[],v=S.view;
- const it=(k,ic,l,on)=>`<button class="si ${on?"on":""}" data-n="${k}"><span>${ic}</span>${l}</button>`;
- const nm=S.f.r0||"Demo user",rl=r?r[1].split(" (")[0]:"Guest";
- $("#sb").innerHTML=`<div class="sbl"><b>🌾</b><div>Mavuno<small>Farm to plate</small></div></div>`+it("map","🗺️","Explore map",v==="map")+it("feed","🎞️","Produce feed",v==="feed")+`<div class="sbh">${rl}</div>`+(role?(pg.length?pg.map(p=>it("pg:"+p[0],ICO[p[0]]||"•",p[1],v==="acct"&&S.pg===p[0])).join(""):it("acct","📋","Dashboard",v==="acct")):it("acct","👤","Choose a role",v==="acct"))+`<div class="sbu"><i>${nm[0].toUpperCase()}</i><div>${nm}<small>${rl}</small></div><button data-n="out" title="Sign out">↪</button></div>`;
-}
-function nav(){
- const a=S.auth,rl=S.role?ROLES[S.role][1].split(" (")[0]:"Account",pp=(PAGES[S.role]||[]).find(p=>p[0]===S.pg);
- $(".app").classList.toggle("noside",!a);$(".top").classList.toggle("pre",!a);
- $("#sb").hidden=!a;$("#mt").hidden=!a;
- if(a)sb();
- $("#crumb").textContent=a?(S.view==="acct"?"Home › "+rl+(pp?" › "+pp[1]:""):"Home › Explore › "+(S.view==="feed"?"Feed":"Map")):"Welcome";
- $("#av").textContent=(S.f.r0||"D")[0].toUpperCase();
- document.querySelectorAll("#seg button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.view));
- document.querySelectorAll("#mt [data-t]").forEach(x=>x.classList.toggle("on",(x.dataset.t==="acct")===(S.view==="acct")));
-}
-function syncTabs(){if(!S.auth){S.view="acct";$("#explore").hidden=true;A.hidden=false}nav()}
-function go(v){S.view=v;const ex=v!=="acct";$("#explore").hidden=!ex;A.hidden=ex;$("#explore").classList.toggle("feedv",v==="feed");if(v==="feed")feed();if(v==="acct")acct();nav()}
-function feed(){
- const rows=[],bg={beef:"#f9d6c9",chicken:"#ffe3b3",eggs:"#fff1b8",vegetables:"#cdeccb",milk:"#d7ebfb"};
- FARMS.forEach(f=>f.it.forEach(i=>{if(cat==="all"||i[0]===cat)rows.push([f,i])}));
- $("#feed").innerHTML=rows.length?rows.map(([f,i])=>`<section class="reel" style="background:${i[5]?`url(${i[5]}) center/cover`:bg[i[0]]||"#e6f6e2"}"><div class="rbig">${i[5]?"":EMO[i[0]]}</div><div class="rail"><button data-f="${f.id}">💬<small>Chat</small></button><button data-f="${f.id}">🛒<small>Order</small></button><button data-like>♥<small>Like</small></button></div><div class="rcap"><b>${f.n}</b> ${f.v?"✔ Verified":""}<div class="rp">${i[1]} · KES ${i[2]}/${i[3]}${i[4]?" · "+i[4]+" available":""}</div><div class="rs">${f.a} · ★ ${f.r}</div></div></section>`).join(""):`<div class="card sub" style="margin:20px">No produce in this category yet.</div>`;
-}
-$("#feed").onclick=e=>{const b=e.target.closest("[data-f]");if(b){go("map");farm(+b.dataset.f);$("#panel").scrollIntoView({behavior:"smooth"});return}const l=e.target.closest("[data-like]");if(l)l.classList.toggle("liked")};
-$("#seg").onclick=e=>{const b=e.target.closest("[data-v]");if(b)go(b.dataset.v)};
-chipsEl.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;sel=null;chips();pins();home();feed()};
-document.querySelectorAll("#mt [data-t]").forEach(b=>b.onclick=()=>go(b.dataset.t==="acct"?"acct":"map"));
-$("#sb").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;const n=b.dataset.n;
- if(n==="out"){S.auth=0;S.mode="";S.role=S.reg=null;go("acct")}
- else if(n==="map"||n==="feed")go(n);
- else{if(n.startsWith("pg:"))S.pg=n.slice(3);go("acct")}
- $("#sb").classList.remove("open")};
-$("#burger").onclick=()=>$("#sb").classList.toggle("open");
-chips();pins();home();$("#explore").hidden=true;A.hidden=false;acct();nav();
-</script>
-<script>
-let dp;
-addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;document.getElementById("inst").hidden=false});
-document.getElementById("inst").onclick=async()=>{if(dp){dp.prompt();dp=null;document.getElementById("inst").hidden=true}};
-addEventListener("appinstalled",()=>{document.getElementById("inst").hidden=true});
-if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+sb.auth.onAuthStateChange((ev, ses) => {
+  if (ev === "PASSWORD_RECOVERY") setTimeout(() => { const p = prompt("Choose a new password (6+ characters)"); if (p) sb.auth.updateUser({ password: p }).then(r => toast(r.error ? r.error.message : "Password changed.")); }, 0);
+  const id = ses?.user?.id || null; if (id === S.uid) return; S.uid = id;
+  setTimeout(() => guard(start)(ses?.user || null), 0);
+});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 </script>
 </body>
 </html>
