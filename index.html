@@ -209,7 +209,7 @@ document.addEventListener("input", e => { if (e.target.id === "q") drawFarms(); 
 const F = {
   in: async fd => { ok(await sb.auth.signInWithPassword({ email: fd.get("email").trim(), password: fd.get("password") })); },
   up: async fd => {
-    const r = ok(await sb.auth.signUp({ email: fd.get("email").trim(), password: fd.get("password"), options: { data: { full_name: fd.get("full_name").trim(), phone: fd.get("phone").trim(), county: fd.get("county").trim(), role: fd.get("role") } } }));
+    const r = ok(await sb.auth.signUp({ email: fd.get("email").trim(), password: fd.get("password"), options: { emailRedirectTo: location.href.split("#")[0], data: { full_name: fd.get("full_name").trim(), phone: fd.get("phone").trim(), county: fd.get("county").trim(), role: fd.get("role") } } }));
     if (!r.session) { authView("in"); toast("Account created. Open the email we sent you, confirm, then log in."); }
   },
   order: async (fd, f) => {
