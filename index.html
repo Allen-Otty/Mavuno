@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <style>
 :root{--bg:#f6f8f3;--card:#fff;--ink:#16221a;--mut:#6b7a6e;--g:#3c8c2a;--g2:#e8f3e1;--line:#e3e9dd;--grad:linear-gradient(135deg,#7bb83a,#2f7d1f);color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#111a13;--card:#1a251c;--ink:#e8efe6;--mut:#9fb09f;--g:#7fd16a;--g2:#223a26;--line:#2a3a2d;color-scheme:dark}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
 i{font-style:normal;color:#d7f27a}
@@ -50,22 +49,59 @@ img.ph{width:54px;height:54px;object-fit:cover;border-radius:12px}.pr{display:fl
 
 .abg{position:fixed;inset:0;z-index:-1;background:linear-gradient(118deg,transparent 36%,rgba(232,170,60,.6) 36.4%,transparent 37.6%),linear-gradient(123deg,transparent 45%,rgba(255,214,90,.4) 45.3%,transparent 46.4%),linear-gradient(112deg,transparent 56%,rgba(190,120,30,.35) 56.5%,transparent 58%),radial-gradient(90% 70% at 8% 12%,rgba(176,112,24,.55),transparent 60%),radial-gradient(70% 60% at 100% 100%,rgba(120,80,20,.5),transparent 60%),#0a0a0a}
 .awrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 18px) 16px 24px}
-.abrand{color:#fff;font-size:30px;font-weight:800;margin-bottom:14px}.abrand i{color:#ffd23f}
+.abrand{color:#fff;font-size:30px;font-weight:800;margin-bottom:14px}.abrand i{color:#ffd3bf}
 .glass{width:100%;max-width:430px;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.06));clip-path:polygon(30px 0,100% 0,100% calc(100% - 30px),calc(100% - 30px) 100%,0 100%,0 30px);animation:pop .4s ease}
 .gi{background:rgba(16,16,16,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:26px 22px 20px;color:#fff;clip-path:polygon(30px 0,100% 0,100% calc(100% - 30px),calc(100% - 30px) 100%,0 100%,0 30px)}
 @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}}
-.gi h2{margin:0;font-size:28px}.gi h2 em{font-style:normal;color:#ffd23f}.gi .sub{color:#a8a8a8;font-size:13px;margin:2px 0 14px}
+.gi h2{margin:0;font-size:28px}.gi h2 em{font-style:normal;color:#ffd3bf}.gi .sub{color:#a8a8a8;font-size:13px;margin:2px 0 14px}
 .lb{display:block;font-size:13px;font-weight:600;margin-top:10px}
 .f{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:0 12px;margin:5px 0;color:#9a9a9a}
-.f:focus-within{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.18)}
+.f:focus-within{border-color:#ffd3bf;box-shadow:0 0 0 3px rgba(255,211,191,.25)}
 .f input,.f select{border:0;background:none;color:#fff;margin:0;padding:12px 0;border-radius:0;outline:0}.f select option{color:#000}
-.eye{background:none;color:#ffd23f;padding:4px 0;font-size:12px;flex:0 0 auto;border-radius:6px}
+.eye{background:none;color:#ffd3bf;padding:4px 0;font-size:12px;flex:0 0 auto;border-radius:6px}
 .gi .err{color:#ff8a80}.gi .f:has(.bad){border-color:#ff6b6b}
-.opts{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:12px 0;gap:8px}.opts label{display:flex;align-items:center;gap:6px}.opts input{width:auto;margin:0;accent-color:#ffd23f}
-.gi a{color:#ffd23f;font-weight:600}.gi .mut{color:#a8a8a8}
+.opts{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:12px 0;gap:8px}.opts label{display:flex;align-items:center;gap:6px}.opts input{width:auto;margin:0;accent-color:#ffd3bf}
+.gi a{color:#ffd3bf;font-weight:600}.gi .mut{color:#a8a8a8}
 .go{width:100%;background:linear-gradient(180deg,#ffe14d,#f5c400);color:#111;box-shadow:0 6px 26px rgba(255,208,0,.35);margin-top:6px;font-size:16px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.splash{background:#0a0a0a}.splash i{color:#ffd23f}
+.splash{background:#0a0a0a}.splash i{color:#ffd3bf}
+
+:root{--bg:#f3d3c3;--card:rgba(255,255,255,.38);--ink:#3b1d14;--mut:#8b6658;--g:#d2452d;--g2:rgba(255,255,255,.5);--line:rgba(255,255,255,.6);--grad:linear-gradient(135deg,#ff8a63,#e0452f);--glass:rgba(255,255,255,.38);color-scheme:light}
+body{background:radial-gradient(60% 40% at 10% 8%,#ffb9a0 0,transparent 70%),radial-gradient(50% 40% at 95% 30%,#ffd9b8 0,transparent 70%),radial-gradient(60% 50% at 70% 100%,#e8795c 0,transparent 70%),#f3d3c3;background-attachment:fixed}
+header{background:var(--glass);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);color:var(--ink);margin:10px 12px 0;border:1px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:0 8px 30px rgba(140,60,35,.15)}
+header a,header i{color:var(--g)}
+.card,.pc,.chip,nav,.tile,.gcard,#sheet>div,.cr,.cl,.cv,input,select,textarea{backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3)}
+.card,.pc,.tile,.gcard{background:var(--glass);border:1px solid var(--line);box-shadow:0 8px 30px rgba(140,60,35,.14)}
+.chip{background:var(--glass)}.chip.on{background:var(--grad)}
+input,select,textarea{background:rgba(255,255,255,.55);border-color:var(--line)}
+nav{background:var(--glass);border:1px solid var(--line);margin:0 12px calc(8px + env(safe-area-inset-bottom));border-radius:22px;left:0;right:0;padding-bottom:0;max-width:560px;margin-inline:auto}
+#sheet>div{background:rgba(255,236,226,.82)}
+.banner,.hero2{box-shadow:0 12px 32px rgba(224,69,47,.35)}
+.m.me{background:var(--grad)}.m{background:rgba(255,255,255,.6)}.m small{display:block;font-size:10px;opacity:.7;margin-top:2px}
+.abg{background:radial-gradient(60% 50% at 15% 10%,rgba(255,122,89,.75),transparent 70%),radial-gradient(55% 45% at 90% 85%,rgba(224,69,47,.65),transparent 70%),radial-gradient(40% 35% at 85% 15%,rgba(255,190,140,.45),transparent 70%),#1d0f0b}
+.go{background:var(--grad);color:#fff;box-shadow:0 6px 26px rgba(224,69,47,.45)}.splash{background:#1d0f0b}
+/* dashboard */
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.hero2{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--grad);color:#fff;border-radius:24px;padding:18px}
+.hero2 h2{margin:2px 0;font-size:20px}.hero2 small{opacity:.85}
+.tile{border-radius:20px;padding:14px}.tile small{color:var(--mut)}.tile b{display:block;font-size:22px}
+.gcard{border-radius:20px;padding:14px;grid-column:1/-1}.gcard svg{width:100%;height:auto;display:block}.days{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.lime{background:linear-gradient(160deg,#dff58a,#b9e24f);color:#26340a;border-radius:20px;padding:14px;grid-column:1/-1}
+.bar{background:rgba(255,255,255,.7);border-radius:99px;height:10px;margin:3px 0 8px;overflow:hidden}.bar i{display:block;height:100%;background:#26340a;border-radius:99px}
+.add{grid-column:1/-1;border:2px dashed rgba(255,255,255,.9);border-radius:20px;text-align:center;padding:14px;font-weight:700;color:var(--g);cursor:pointer}
+@media (min-width:620px){.bento{grid-template-columns:repeat(4,1fr)}.hero2{grid-column:span 4}.gcard{grid-column:span 2}.lime{grid-column:span 2}.add{grid-column:span 4}}
+/* chat */
+.av{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;color:#fff;font-weight:700;flex:0 0 auto;font-size:15px}.av.lg{width:40px;height:40px}
+.avs{display:flex;gap:12px;overflow-x:auto;padding:6px 0 10px}.avs div{text-align:center;font-size:11px;color:var(--mut);max-width:56px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cr{display:flex;gap:10px;align-items:center;padding:10px;border-radius:16px;cursor:pointer;margin:4px 0}.cr.on,.cr:hover{background:var(--glass)}
+.cb{flex:1;min-width:0}.row2{display:flex;justify-content:space-between;align-items:center;gap:8px}.ellip{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bdg{background:var(--grad);color:#fff;border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px}
+.ch{display:flex;align-items:center;gap:10px;padding:6px 0 10px;border-bottom:1px solid var(--line)}.back{flex:0;padding:8px 12px}
+#v-chat .msgs{max-height:none;height:calc(100vh - 330px);min-height:240px;padding:8px 0}
+.sys{text-align:center;font-size:12px;color:var(--mut);background:var(--glass);border-radius:99px;padding:4px 12px;margin:6px auto;width:max-content;max-width:92%}
+.mi{display:flex;gap:8px}.mi input{margin:0}.mi button{flex:0;border-radius:99px;padding:0 18px}
+.cwrap .cv{display:none}#v-chat.open .cl{display:none}#v-chat.open .cv{display:block}
+@media (min-width:820px){#v-chat{max-width:980px}.cwrap{display:grid;grid-template-columns:340px 1fr;gap:14px}.cwrap .cl,.cwrap .cv,#v-chat.open .cl,#v-chat.open .cv{display:block}.back{display:none}}
 </style>
 </head>
 <body>
@@ -126,7 +162,7 @@ function authView(mode = "in") {
   <button class="go">${up ? "Create Account" : "Sign In"} →</button></form>
   <p class="mut c small" style="margin:14px 0 0">${up ? `Already have an account? <a href="#" data-a="auth" data-m="in">Sign in</a>` : `Don't have an account? <a href="#" data-a="auth" data-m="up">Sign up</a>`}</p>
   ${up ? `<p class="mut c small" style="margin:6px 0 0">No email? Make a free Gmail first.</p>` : ""}</div></div></div>`;
-  document.body.style.background = "#0a0a0a"; hideSplash();
+  document.body.style.background = "#1d0f0b"; hideSplash();
 }
 
 // ---- App shell
@@ -138,17 +174,18 @@ function shell() {
   <div class="banner"><b>Fresh from local farms</b>Order straight from the farmer. Pay on delivery.</div>
   <div class="chips" id="chips"></div><h3>Fresh produce</h3><div class="grid" id="grid"></div><h3>Farms near you</h3><div id="list"></div></section>
   <section id="v-map" hidden><div id="map"></div></section>
-  <section id="v-orders" hidden></section><section id="v-farm" hidden></section>
-  <nav>${n("home", "🏠", "Home")}${n("map", "📍", "Map")}${n("orders", "🧾", "Orders")}${fm ? n("farm", "🌱", "My farm") : ""}</nav><div id="sheet" hidden></div>`;
+  <section id="v-chat" hidden></section><section id="v-orders" hidden></section><section id="v-farm" hidden></section>
+  <nav>${n("home", "🏠", "Home")}${n("map", "📍", "Map")}${n("chat", "💬", "Chats")}${n("orders", "📊", "Dashboard")}${fm ? n("farm", "🌱", "My farm") : ""}</nav><div id="sheet" hidden></div>`;
   document.body.style.background = ""; show("home"); initMap().then(loadFarms).catch(x => toast("Map failed to load: " + x.message)); hideSplash();
 }
 function show(v) {
   S.v = v; stopChat();
-  ["home", "map", "orders", "farm"].forEach(k => { const e = $("#v-" + k); if (e) e.hidden = k !== v; });
+  S.chat = null; ["home", "map", "orders", "farm", "chat"].forEach(k => { const e = $("#v-" + k); if (e) e.hidden = k !== v; });
   document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
   if (v === "map" && M) M.fix();
 }
-const nav = guard(async v => { show(v); if (v === "map" || v === "home") await loadFarms(); if (v === "orders") await loadOrders(); if (v === "farm") await farmView(); });
+const nav = guard(async v => { show(v); if (v === "map" || v === "home") await loadFarms(); if (v === "orders") await loadOrders();
+  if (v === "chat") await loadChats(); if (v === "farm") await farmView(); });
 
 // ---- Farms on the map
 async function loadFarms() {
@@ -184,33 +221,78 @@ const openFarm = guard(async id => {
   ${mine || !items.length ? "" : `<button class="btn" style="width:100%">Send order request</button><p class="mut small">Pay cash on delivery. Agree delivery details in chat.</p>`}</form></div>`;
 });
 
-// ---- Orders and chat
+// ---- Dashboard and orders
+const curve = (v, w = 300, hh = 90) => { const m = Math.max(1, ...v), p = v.map((y, i) => [i * w / 6, hh - 8 - y / m * (hh - 24)]); return p.map((q, i) => i ? `C${(p[i - 1][0] + q[0]) / 2},${p[i - 1][1]} ${(p[i - 1][0] + q[0]) / 2},${q[1]} ${q[0]},${q[1]}` : `M${q[0]},${q[1]}`).join(" "); };
+const ring = x => `<svg viewBox="0 0 80 80" width="84" height="84"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="8"/><circle cx="40" cy="40" r="34" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(x * 2.136).toFixed(1)} 214" transform="rotate(-90 40 40)"/><text x="40" y="45" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">${x}%</text></svg>`;
 async function loadOrders() {
   stopChat();
   const d = ok(await sb.from("orders").select("id,status,total,created_at,buyer_id,farm_id,farms(name),order_items(quantity,unit_price,products(name,unit))").order("created_at", { ascending: false }));
-  $("#v-orders").innerHTML = d.length ? d.map(o => {
-    const fmr = S.farm && o.farm_id === S.farm.id, b = (s, t, c = "") => `<button class="${c}" data-a="st" data-id="${o.id}" data-s="${s}">${t}</button>`;
-    let act = "";
-    if (fmr) act = o.status === "pending" ? b("accepted", "Accept") + b("rejected", "Reject", "bad") : o.status === "accepted" ? b("delivered", "Mark delivered") : "";
-    else act = ["pending", "accepted"].includes(o.status) ? b("cancelled", "Cancel", "bad") : o.status === "delivered" ? b("completed", "Confirm received") : "";
+  const fm = S.p.role === "farmer", mine = d.filter(o => fm ? S.farm && o.farm_id === S.farm.id : o.buyer_id === S.u.id);
+  const n = s => mine.filter(o => s.includes(o.status)).length, tot = mine.length, done = n(["delivered", "completed"]);
+  const money = mine.filter(o => ["delivered", "completed"].includes(o.status)).reduce((a, o) => a + Number(o.total || 0), 0), pct = tot ? Math.round(done / tot * 100) : 0;
+  const days = [...Array(7)].map((_, i) => { const t = new Date(); t.setDate(t.getDate() - 6 + i); return t; });
+  const pts = days.map(t => mine.filter(o => new Date(o.created_at).toDateString() === t.toDateString()).length);
+  let pn = 0; if (fm && S.farm) pn = (await sb.from("products").select("id", { count: "exact", head: true }).eq("farm_id", S.farm.id)).count || 0;
+  const first = esc((S.p.full_name || "").split(" ")[0]), pend = n(["pending"]);
+  const bar = (l, s) => `<div class="small"><b>${l}</b> · ${n(s)}</div><div class="bar"><i style="width:${tot ? n(s) / tot * 100 : 0}%"></i></div>`;
+  const b = (o, s, t, c = "") => `<button class="${c}" data-a="st" data-id="${o.id}" data-s="${s}">${t}</button>`;
+  $("#v-orders").innerHTML = `<div class="bento">
+  <div class="hero2"><div><small>${fm ? "Your farm this week" : "Your orders"}</small><h2>Hi ${first}, ${tot ? (pend ? pend + " waiting for you" : "you're all caught up") : "let's get started"}</h2><small>${tot} order${tot === 1 ? "" : "s"} so far · ${done} done</small></div>${ring(pct)}</div>
+  <div class="tile"><small>Orders</small><b>${tot}</b></div><div class="tile"><small>Pending</small><b>${pend}</b></div>
+  <div class="tile"><small>${fm ? "Earned" : "Spent"}</small><b>KES ${money.toLocaleString()}</b></div>
+  <div class="tile">${fm ? `<small>Products</small><b>${pn}</b>` : `<small>Farms</small><b>${new Set(mine.map(o => o.farm_id)).size}</b>`}</div>
+  <div class="gcard"><b>Orders this week</b><svg viewBox="0 0 300 100"><path d="${curve(pts)}" fill="none" stroke="#e0452f" stroke-width="3.5" stroke-linecap="round"/></svg><div class="days">${days.map(t => `<span>${t.toLocaleDateString([], { weekday: "short" })}</span>`).join("")}</div></div>
+  <div class="lime"><b>Order progress</b><div style="margin-top:6px">${bar("Pending", ["pending"])}${bar("Accepted", ["accepted"])}${bar("Delivered", ["delivered"])}${bar("Completed", ["completed"])}</div></div>
+  ${fm ? `<div class="add" data-a="nav" data-v="farm">＋ Add produce</div>` : `<div class="add" data-a="nav" data-v="home">＋ Find fresh produce</div>`}</div>
+  <h3>Orders</h3>` + (mine.length ? mine.map(o => {
+    const fmr = fm; let act = "";
+    if (fmr) act = o.status === "pending" ? b(o, "accepted", "Accept") + b(o, "rejected", "Reject", "bad") : o.status === "accepted" ? b(o, "delivered", "Mark delivered") : "";
+    else act = ["pending", "accepted"].includes(o.status) ? b(o, "cancelled", "Cancel", "bad") : o.status === "delivered" ? b(o, "completed", "Confirm received") : "";
     return `<div class="card"><div class="row"><b>${esc(o.farms?.name)}</b><span class="tag" style="flex:0">${esc(o.status)}</span></div>
     <div class="mut small">${fmr ? "Incoming order" : "Your order"} · ${new Date(o.created_at).toLocaleDateString()}</div>
     ${(o.order_items || []).map(i => `<div>${esc(i.quantity)} ${esc(i.products?.unit)} ${esc(i.products?.name)} × KES ${esc(i.unit_price)}</div>`).join("")}
-    <div><b>Total KES ${esc(o.total)}</b></div><div class="row" style="margin-top:8px">${act}<button class="alt" data-a="chat" data-id="${o.id}">Chat</button></div><div id="c-${o.id}"></div></div>`;
-  }).join("") : `<p class="mut c">No orders yet. Find a farm on the map and send an order request.</p>`;
+    <div><b>Total KES ${esc(o.total)}</b></div><div class="row" style="margin-top:8px">${act}<button class="alt" data-a="openchat" data-id="${o.id}">Chat</button></div></div>`;
+  }).join("") : `<p class="mut c">No orders yet. Find a farm and send an order request.</p>`);
 }
+
+// ---- Chats: inbox + conversation
+const ini = s => (s || "?").trim().split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+const av = (s, lg) => `<span class="av${lg ? " lg" : ""}" style="background:hsl(${[...String(s)].reduce((a, c) => a + c.charCodeAt(0), 0) % 360} 55% 52%)">${esc(ini(s))}</span>`;
+const hm = t => { const d = new Date(t); return d.toDateString() === new Date().toDateString() ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : d.toLocaleDateString([], { day: "numeric", month: "short" }); };
 const stopChat = () => { clearInterval(S.timer); S.timer = null; };
-const loadMsgs = guard(async id => {
-  const box = document.querySelector(`#c-${id} .msgs`); if (!box) return;
-  const d = ok(await sb.from("messages").select("sender_id,body,created_at").eq("order_id", id).order("created_at"));
-  box.innerHTML = d.map(m => `<div class="m ${m.sender_id === S.u.id ? "me" : ""}">${esc(m.body)}</div>`).join("") || `<p class="mut small">No messages yet. Say hello and agree on delivery.</p>`;
-  box.scrollTop = box.scrollHeight;
+const loadChats = guard(async () => {
+  S.chat = null; stopChat();
+  const os = ok(await sb.from("orders").select("id,status,total,buyer_id,farm_id,created_at,farms(name)").order("created_at", { ascending: false }));
+  const ms = os.length ? ok(await sb.from("messages").select("order_id,sender_id,body,created_at,read_at").in("order_id", os.map(o => o.id)).order("created_at", { ascending: false }).limit(500)) : [];
+  const others = [...new Set(os.filter(o => o.buyer_id !== S.u.id).map(o => o.buyer_id))];
+  const pr = others.length ? ok(await sb.from("profiles").select("id,full_name").in("id", others)) : [];
+  const nm = Object.fromEntries(pr.map(x => [x.id, x.full_name]));
+  S.convs = os.map(o => { const last = ms.find(m => m.order_id === o.id); return { id: o.id, status: o.status, total: o.total, name: o.buyer_id === S.u.id ? o.farms?.name : (nm[o.buyer_id] || "Buyer"), last, t: last?.created_at || o.created_at, unread: ms.filter(m => m.order_id === o.id && m.sender_id !== S.u.id && !m.read_at).length }; }).sort((a, b) => new Date(b.t) - new Date(a.t));
+  $("#v-chat").className = "";
+  $("#v-chat").innerHTML = `<div class="cwrap"><div class="cl"><input id="cq" placeholder="Search chats"><div class="avs" id="avs"></div><div id="cl-list"></div></div><div class="cv" id="cv"><p class="mut c" style="margin-top:40px">Select a chat to start talking.</p></div></div>`;
+  drawChats();
 });
-function toggleChat(id) {
-  const c = $("#c-" + id), open = c.innerHTML !== ""; document.querySelectorAll("[id^=c-]").forEach(e => e.innerHTML = ""); stopChat();
-  if (open) return;
-  c.innerHTML = `<div class="msgs"></div><form data-f="msg" data-id="${id}" class="row"><input name="body" placeholder="Type a message" required autocomplete="off"><button style="flex:0">Send</button></form>`;
-  loadMsgs(id); S.timer = setInterval(() => loadMsgs(id), 4000);
+function drawChats() {
+  const q = ($("#cq")?.value || "").toLowerCase(), cs = (S.convs || []).filter(c => !q || (c.name || "").toLowerCase().includes(q));
+  $("#avs").innerHTML = [...new Set((S.convs || []).map(c => c.name))].slice(0, 8).map(x => `<div>${av(x)}<br>${esc((x || "").split(" ")[0])}</div>`).join("");
+  $("#cl-list").innerHTML = cs.length ? cs.map(c => `<div class="cr ${c.id === S.chat ? "on" : ""}" data-a="openchat" data-id="${c.id}">${av(c.name)}<div class="cb"><div class="row2"><b class="ellip">${esc(c.name)}</b><span class="mut small">${hm(c.t)}</span></div>
+    <div class="row2"><span class="mut small ellip">${c.last ? (c.last.sender_id === S.u.id ? "You: " : "") + esc(c.last.body) : "Order " + esc(c.status) + " · say hello"}</span>${c.unread ? `<span class="bdg">${c.unread}</span>` : ""}</div></div></div>`).join("")
+    : `<p class="mut c">No chats yet. Chats start when an order request is sent.</p>`;
+}
+const loadMsgs = guard(async id => {
+  const box = $("#msgs"); if (!box || S.chat !== id) return;
+  const d = ok(await sb.from("messages").select("sender_id,body,created_at,read_at").eq("order_id", id).order("created_at"));
+  const end = !box.dataset.n || box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  box.innerHTML = `<div class="sys">Order started. Agree price, delivery and pickup here.</div>` + d.map(m => { const me = m.sender_id === S.u.id; return `<div class="m ${me ? "me" : ""}">${esc(m.body)}<small>${hm(m.created_at)}${me ? (m.read_at ? " · Seen" : " · Sent") : ""}</small></div>`; }).join("");
+  box.dataset.n = d.length; if (end) box.scrollTop = box.scrollHeight;
+  if (d.some(m => m.sender_id !== S.u.id && !m.read_at)) { await sb.rpc("mark_read", { p_order: id }); const c = S.convs?.find(x => x.id === id); if (c) { c.unread = 0; drawChats(); } }
+});
+async function openChat(id) {
+  const c = S.convs.find(x => x.id === id); if (!c) return;
+  stopChat(); S.chat = id; $("#v-chat").className = "open";
+  $("#cv").innerHTML = `<div class="ch"><button class="alt back" data-a="chatback">←</button>${av(c.name, 1)}<div><b>${esc(c.name)}</b><div class="small mut">Order ${esc(c.status)} · KES ${esc(c.total)}</div></div></div><div class="msgs" id="msgs"></div>
+  <form data-f="msg" data-id="${id}" class="mi"><input name="body" placeholder="Type a message" required autocomplete="off"><button>➤</button></form>`;
+  drawChats(); await loadMsgs(id); S.timer = setInterval(() => loadMsgs(id), 4000);
 }
 
 // ---- Farmer: my farm and products
@@ -247,7 +329,8 @@ const A = {
   nav: d => nav(d.v),
   farm: d => openFarm(d.id),
   close: () => { $("#sheet").hidden = true; },
-  chat: d => toggleChat(d.id),
+  openchat: guard(async d => { if (S.v !== "chat") { show("chat"); await loadChats(); } await openChat(d.id); }),
+  chatback: guard(async () => { await loadChats(); }),
   st: guard(async d => { ok(await sb.from("orders").update({ status: d.s }).eq("id", d.id)); await loadOrders(); toast("Order " + d.s); }),
   tog: guard(async d => { ok(await sb.from("products").update({ active: d.on !== "1" }).eq("id", d.id)); await farmView(); }),
   gps: () => navigator.geolocation ? navigator.geolocation.getCurrentPosition(p => setLoc(p.coords.latitude, p.coords.longitude), () => toast("Could not get your location. Use Pick on map."), { enableHighAccuracy: true }) : toast("Location is not available on this device."),
@@ -255,7 +338,7 @@ const A = {
 };
 function setLoc(la, lo) { const f = document.querySelector("form[data-f=farm]"); if (f) { f.lat.value = la.toFixed(6); f.lng.value = lo.toFixed(6); } }
 document.addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (!b) return; e.preventDefault(); A[b.dataset.a]?.(b.dataset, b); });
-document.addEventListener("input", e => { if (e.target.id === "q") drawFarms(); });
+document.addEventListener("input", e => { if (e.target.id === "q") drawFarms(); if (e.target.id === "cq") drawChats(); });
 
 const F = {
   in: async fd => { localStorage.setItem("mv_rem", fd.get("rem") ? "1" : "0"); sessionStorage.setItem("mv_alive", "1"); ok(await sb.auth.signInWithPassword({ email: fd.get("email").trim(), password: fd.get("password") })); },
